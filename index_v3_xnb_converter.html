@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
+<title>Stardew Portrait Changer</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#101218;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Apple SD Gothic Neo",sans-serif}
+body{padding:18px 14px 40px}.app{max-width:520px;margin:auto}
+.header{text-align:center;padding:14px 8px 22px}.logo{font-size:58px}.title{font-size:24px;font-weight:800;margin-top:8px}.sub{font-size:12px;color:#9297a5;margin-top:6px}
+.card{background:#1b1f28;border:1px solid #2b303c;border-radius:20px;padding:18px;margin-bottom:14px}.ct{font-size:16px;font-weight:800;margin-bottom:13px}
+.desc{font-size:12px;line-height:1.65;color:#969ba8}
+select{width:100%;height:52px;border-radius:14px;border:1px solid #393f4d;background:#272c37;color:#fff;padding:0 14px;font-size:15px}
+button{width:100%;min-height:53px;border:0;border-radius:15px;margin-top:10px;font-size:15px;font-weight:800;color:#fff;background:#5965ff}
+button.secondary{background:#292e39}button:disabled{opacity:.4}
+.box{margin-top:12px;padding:13px;border-radius:13px;background:#14171e;border:1px solid #2d323e}
+.name{font-size:13px;font-weight:700;word-break:break-all}.info{font-size:11px;color:#858b99;margin-top:5px}
+.preview{display:flex;justify-content:center;align-items:center;min-height:250px;padding:14px;border-radius:15px;background:repeating-conic-gradient(#222733 0 25%,#181c24 0 50%) 50%/24px 24px;overflow:hidden}
+#preview{max-width:100%;width:256px;height:auto;image-rendering:pixelated;display:none}
+.status{padding:14px;border-radius:14px;background:#151820;border:1px solid #292e39;color:#aeb3bf;font-size:12px;line-height:1.6}
+.status.ok{color:#9ee6ad;border-color:#315f3b}.status.err{color:#ff9c9c;border-color:#653838}.status.warn{color:#ffd68a;border-color:#66512d}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.spec{padding:12px;background:#151820;border-radius:12px}.sl{font-size:10px;color:#7f8592}.sv{font-size:13px;font-weight:700;margin-top:4px}
+.hidden{display:none!important}.footer{text-align:center;color:#656b78;font-size:10px;line-height:1.6;padding:4px 18px}
+.step{display:flex;gap:10px;align-items:center;margin:8px 0}.num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#303541;color:#aaa;font-size:12px;font-weight:800}.step.active .num{background:#5965ff;color:#fff}.step.done .num{background:#3e9653;color:#fff}.stepText{font-size:12px;color:#9ca1ad}.step.active .stepText,.step.done .stepText{color:#fff}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="header">
+<div class="logo">🥔</div>
+<div class="title">Stardew Portrait Changer</div>
+<div class="sub">PNG → 실제 XNB 변환 테스트</div>
+</div>
+
+<div class="card">
+<div class="ct">작업 순서</div>
+<div id="s1" class="step active"><div class="num">1</div><div class="stepText">원본 XNB 선택</div></div>
+<div id="s2" class="step"><div class="num">2</div><div class="stepText">새 PNG 선택</div></div>
+<div id="s3" class="step"><div class="num">3</div><div class="stepText">XNB 변환</div></div>
+<div id="s4" class="step"><div class="num">4</div><div class="stepText">새 XNB 저장</div></div>
+</div>
+
+<div class="card">
+<div class="ct">① NPC</div>
+<select id="npc">
+<option>Harvey</option><option>Abigail</option><option>Alex</option><option>Elliott</option>
+<option>Emily</option><option>Haley</option><option>Leah</option><option>Maru</option>
+<option>Penny</option><option>Sam</option><option>Sebastian</option><option>Shane</option>
+</select>
+<div class="box"><div id="target" class="name">Content/Portraits/Harvey.xnb</div><div class="info">최종 파일 이름</div></div>
+</div>
+
+<div class="card">
+<div class="ct">② 원본 XNB</div>
+<div class="desc">현재 스타듀밸리에서 사용하는 원본 Harvey.xnb를 선택합니다. 이 파일의 XNB 구조를 읽어서 새 PNG를 다시 XNB로 패킹합니다.</div>
+<input id="xnb" type="file" accept=".xnb,application/octet-stream" class="hidden">
+<button id="xnbBtn">원본 XNB 선택</button>
+<div id="xnbBox" class="box hidden"><div id="xnbName" class="name"></div><div id="xnbInfo" class="info"></div></div>
+</div>
+
+<div class="card">
+<div class="ct">③ 새 PNG</div>
+<div class="desc">256 × 768 PNG를 권장합니다. 기존에 사용하던 Harvey.png를 선택하면 됩니다.</div>
+<input id="png" type="file" accept="image/png" class="hidden">
+<button id="pngBtn">새 PNG 선택</button>
+<div id="pngBox" class="box hidden"><div id="pngName" class="name"></div><div id="pngInfo" class="info"></div></div>
+</div>
+
+<div id="previewCard" class="card hidden">
+<div class="ct">초상화 미리보기</div>
+<div class="preview"><img id="preview"></div>
+<div class="grid">
+<div class="spec"><div class="sl">크기</div><div id="size" class="sv">-</div></div>
+<div class="spec"><div class="sl">권장 프레임</div><div class="sv">4 × 12</div></div>
+</div>
+</div>
+
+<div class="card">
+<div class="ct">④ XNB 변환</div>
+<div id="status" class="status">원본 XNB와 새 PNG를 선택해주세요.</div>
+<button id="convert" disabled>XNB로 변환하기</button>
+</div>
+
+<div class="card">
+<div class="ct">⑤ 결과 저장</div>
+<div class="desc">변환된 파일은 선택한 NPC 이름의 .xnb로 저장됩니다.</div>
+<button id="save" disabled>새 Harvey.xnb 저장</button>
+<button id="reset" class="secondary">처음부터 다시</button>
+</div>
+
+<div class="card">
+<div class="ct">적용 경로</div>
+<div class="box"><div class="name">Content</div><div class="info">└─ Portraits<br>&nbsp;&nbsp;&nbsp;└─ <span id="path">Harvey</span>.xnb</div></div>
+</div>
+
+<div class="card">
+<div class="ct">변환 방식</div>
+<div class="desc">
+원본 XNB를 먼저 언팩한 뒤 그 안의 Texture2D PNG를 새 PNG로 교체하고 다시 XNB로 패킹합니다.<br><br>
+이 웹앱은 <b>xnb.js</b>를 사용합니다. 현재 브라우저 패커는 LZX로 다시 압축하지 않고 비압축 또는 LZ4 방식으로 생성할 수 있으므로, 이번 테스트에서는 <b>비압축 XNB</b>로 생성합니다. Stardew에서 실제 로딩되는지 확인하는 것이 다음 테스트입니다.
+</div>
+</div>
+
+<div class="footer">Stardew Portrait Changer · XNB conversion prototype</div>
+</div>
+
+<script type="module">
+import * as XNB from "https://cdn.jsdelivr.net/npm/xnb@1.3.0/dist/xnb.module.js";
+
+const $ = id => document.getElementById(id);
+let xnbFile = null;
+let pngFile = null;
+let outputBlob = null;
+let previewURL = null;
+
+function setStatus(text,type=""){
+  $("status").textContent=text;
+  $("status").className="status"+(type?" "+type:"");
+}
+function step(n){
+  for(let i=1;i<=4;i++){
+    const el=$("s"+i);
+    el.classList.remove("active","done");
+    if(i<n) el.classList.add("done");
+    if(i===n) el.classList.add("active");
+  }
+}
+function bytes(n){
+  if(!n)return"0 B";
+  const u=["B","KB","MB","GB"],i=Math.floor(Math.log(n)/Math.log(1024));
+  return (n/Math.pow(1024,i)).toFixed(2)+" "+u[i];
+}
+function baseName(name){
+  return name.replace(/\.xnb$/i,"");
+}
+function updateTarget(){
+  const n=$("npc").value;
+  $("target").textContent="Content/Portraits/"+n+".xnb";
+  $("path").textContent=n;
+  $("save").textContent="새 "+n+".xnb 저장";
+}
+$("npc").addEventListener("change",updateTarget);
+
+$("xnbBtn").onclick=()=>$("xnb").click();
+$("pngBtn").onclick=()=>$("png").click();
+
+$("xnb").onchange=async()=>{
+  const f=$("xnb").files[0];
+  if(!f)return;
+  xnbFile=f;
+  $("xnbBox").classList.remove("hidden");
+  $("xnbName").textContent=f.name;
+  $("xnbInfo").textContent=bytes(f.size)+" · XNB";
+  try{
+    const data=await XNB.unpackToContent(f);
+    if(data.type!=="png"){
+      setStatus("원본 XNB의 콘텐츠가 PNG/Texture2D로 인식되지 않았습니다.","err");
+      return;
+    }
+    setStatus("원본 XNB의 Texture2D를 정상적으로 읽었습니다. 새 PNG를 선택하세요.","ok");
+    step(2);
+    checkReady();
+  }catch(e){
+    console.error(e);
+    setStatus("XNB 언팩 실패: "+(e?.message||e),"err");
+  }
+};
+
+$("png").onchange=()=>{
+  const f=$("png").files[0];
+  if(!f)return;
+  pngFile=f;
+  $("pngBox").classList.remove("hidden");
+  $("pngName").textContent=f.name;
+  $("pngInfo").textContent=bytes(f.size)+" · PNG";
+  if(previewURL)URL.revokeObjectURL(previewURL);
+  previewURL=URL.createObjectURL(f);
+  $("preview").src=previewURL;
+  $("preview").style.display="block";
+  $("previewCard").classList.remove("hidden");
+  $("preview").onload=()=>{
+    const w=$("preview").naturalWidth,h=$("preview").naturalHeight;
+    $("size").textContent=w+" × "+h;
+    if(w===256&&h===768){
+      setStatus("새 PNG가 256 × 768입니다. 변환할 준비가 되었습니다.","ok");
+    }else{
+      setStatus("PNG 크기: "+w+" × "+h+" · 권장 크기는 256 × 768입니다.","warn");
+    }
+    step(2); checkReady();
+  };
+};
+
+function checkReady(){
+  $("convert").disabled=!(xnbFile&&pngFile);
+}
+
+$("convert").onclick=async()=>{
+  if(!xnbFile||!pngFile)return;
+  $("convert").disabled=true;
+  setStatus("원본 XNB를 언팩하는 중...","warn");
+  step(3);
+  try{
+    const original=await XNB.unpackToFiles(
+      xnbFile,
+      {fileName:baseName(xnbFile.name),contentOnly:false}
+    );
+
+    if(!original||!original.length){
+      throw new Error("XNB에서 패킹용 파일을 추출하지 못했습니다.");
+    }
+
+    const files=[];
+    let replaced=false;
+
+    for(const item of original){
+      const ext=(item.extension||"").toLowerCase();
+      if(ext==="png"&&!replaced){
+        files.push({
+          name:baseName(xnbFile.name)+".png",
+          data:pngFile
+        });
+        replaced=true;
+      }else{
+        files.push({
+          name:baseName(xnbFile.name)+"."+ext,
+          data:item.data
+        });
+      }
+    }
+
+    if(!replaced){
+      throw new Error("원본 XNB에서 Texture2D PNG를 찾지 못했습니다.");
+    }
+
+    setStatus("새 PNG를 넣어 XNB를 패킹하는 중...","warn");
+
+    const result=await XNB.pack(files,{compression:"none",debug:true});
+
+    let data=null;
+
+    if(result instanceof Blob){
+      data=result;
+    }else if(result instanceof ArrayBuffer){
+      data=new Blob([result],{type:"application/octet-stream"});
+    }else if(result instanceof Uint8Array){
+      data=new Blob([result],{type:"application/octet-stream"});
+    }else if(Array.isArray(result)){
+      const hit=result.find(x=>x?.data||x instanceof Blob);
+      if(hit){
+        data=hit.data instanceof Blob
+          ? hit.data
+          : new Blob([hit.data],{type:"application/octet-stream"});
+      }
+    }else if(result?.data){
+      data=result.data instanceof Blob
+        ? result.data
+        : new Blob([result.data],{type:"application/octet-stream"});
+    }
+
+    if(!data) throw new Error("패커가 XNB 바이너리를 반환하지 않았습니다.");
+
+    outputBlob=data;
+
+    setStatus(
+      "XNB 변환 완료. 생성 크기: "+bytes(data.size)+
+      " · 비압축 XNB로 생성되었습니다.",
+      "ok"
+    );
+
+    $("save").disabled=false;
+    step(4);
+
+  }catch(e){
+    console.error(e);
+    outputBlob=null;
+    setStatus("XNB 변환 실패: "+(e?.message||e),"err");
+    $("save").disabled=true;
+    step(2);
+  }finally{
+    $("convert").disabled=false;
+  }
+};
+
+$("save").onclick=()=>{
+  if(!outputBlob)return;
+  const name=$("npc").value+".xnb";
+  const url=URL.createObjectURL(outputBlob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  setStatus(name+" 저장을 시작했습니다. 파일 앱에서 확인하세요.","ok");
+};
+
+$("reset").onclick=()=>{
+  xnbFile=null; pngFile=null; outputBlob=null;
+  $("xnb").value="";$("png").value="";
+  $("xnbBox").classList.add("hidden");$("pngBox").classList.add("hidden");
+  $("previewCard").classList.add("hidden");
+  $("preview").src="";
+  $("save").disabled=true;
+  setStatus("원본 XNB와 새 PNG를 선택해주세요.");
+  step(1);
+  checkReady();
+};
+
+updateTarget();
+</script>
+</body>
+</html>

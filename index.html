@@ -9,13 +9,15 @@
     content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0"
 >
 
-<title>Stardew Portrait Changer</title>
+<title>Stardew Portrait Runtime</title>
 
 <style>
 
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;
+    user-select:none;
 }
 
 html,
@@ -43,23 +45,24 @@ body{
 
 .header{
     text-align:center;
-    padding:14px 8px 22px;
+    padding:14px 8px 24px;
 }
 
 .logo{
     font-size:58px;
+    line-height:1;
 }
 
 .title{
     font-size:24px;
     font-weight:800;
-    margin-top:8px;
+    margin-top:10px;
 }
 
 .sub{
     font-size:12px;
     color:#9297a5;
-    margin-top:6px;
+    margin-top:7px;
 }
 
 .card{
@@ -91,6 +94,7 @@ select{
     color:#fff;
     padding:0 14px;
     font-size:15px;
+    outline:none;
 }
 
 button{
@@ -107,6 +111,10 @@ button{
 
 button.secondary{
     background:#292e39;
+}
+
+button.danger{
+    background:#713b43;
 }
 
 button:disabled{
@@ -131,15 +139,18 @@ button:disabled{
     font-size:11px;
     color:#858b99;
     margin-top:5px;
+    line-height:1.5;
 }
 
 .preview{
     display:flex;
     justify-content:center;
     align-items:center;
-    min-height:250px;
+    min-height:270px;
+    margin-top:12px;
     padding:14px;
     border-radius:15px;
+    overflow:hidden;
 
     background:
         repeating-conic-gradient(
@@ -147,13 +158,11 @@ button:disabled{
             #181c24 0 50%
         )
         50%/24px 24px;
-
-    overflow:hidden;
 }
 
 #preview{
-    max-width:100%;
     width:256px;
+    max-width:100%;
     height:auto;
     image-rendering:pixelated;
     display:none;
@@ -166,7 +175,7 @@ button:disabled{
     border:1px solid #292e39;
     color:#aeb3bf;
     font-size:12px;
-    line-height:1.6;
+    line-height:1.65;
 }
 
 .status.ok{
@@ -208,6 +217,26 @@ button:disabled{
     margin-top:4px;
 }
 
+.path{
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size:11px;
+    line-height:1.6;
+    word-break:break-all;
+
+    background:#14171e;
+    border:1px solid #2d323e;
+
+    padding:12px;
+    border-radius:12px;
+
+    color:#b8bdc8;
+}
+
 .hidden{
     display:none!important;
 }
@@ -230,6 +259,8 @@ button:disabled{
 .num{
     width:28px;
     height:28px;
+    flex:0 0 28px;
+
     border-radius:50%;
 
     display:flex;
@@ -263,19 +294,8 @@ button:disabled{
     color:#fff;
 }
 
-.log{
-    margin-top:10px;
-    padding:10px;
-    background:#0d1015;
-    border-radius:10px;
-    font-family:monospace;
-    font-size:10px;
-    line-height:1.6;
-    color:#777e8c;
-    white-space:pre-wrap;
-    word-break:break-all;
-    max-height:180px;
-    overflow:auto;
+input[type="file"]{
+    display:none;
 }
 
 </style>
@@ -286,10 +306,9 @@ button:disabled{
 
 <div class="app">
 
-
-<!-- =========================================
+<!-- ==================================================
      HEADER
-========================================= -->
+================================================== -->
 
 <div class="header">
 
@@ -298,19 +317,19 @@ button:disabled{
     </div>
 
     <div class="title">
-        Stardew Portrait Changer
+        Stardew Portrait Runtime
     </div>
 
     <div class="sub">
-        PNG → XNB 변환기
+        커스텀 NPC 초상화 관리자
     </div>
 
 </div>
 
 
-<!-- =========================================
+<!-- ==================================================
      진행 단계
-========================================= -->
+================================================== -->
 
 <div class="card">
 
@@ -318,45 +337,80 @@ button:disabled{
         작업 순서
     </div>
 
-    <div id="s1" class="step active">
-        <div class="num">1</div>
-        <div class="stepText">
-            원본 XNB 선택
+    <div
+        id="step1"
+        class="step active"
+    >
+
+        <div class="num">
+            1
         </div>
+
+        <div class="stepText">
+            NPC 선택
+        </div>
+
     </div>
 
-    <div id="s2" class="step">
-        <div class="num">2</div>
-        <div class="stepText">
-            새 PNG 선택
+
+    <div
+        id="step2"
+        class="step"
+    >
+
+        <div class="num">
+            2
         </div>
+
+        <div class="stepText">
+            PNG 선택
+        </div>
+
     </div>
 
-    <div id="s3" class="step">
-        <div class="num">3</div>
-        <div class="stepText">
-            XNB 변환
+
+    <div
+        id="step3"
+        class="step"
+    >
+
+        <div class="num">
+            3
         </div>
+
+        <div class="stepText">
+            적용 설정 생성
+        </div>
+
     </div>
 
-    <div id="s4" class="step">
-        <div class="num">4</div>
-        <div class="stepText">
-            새 XNB 저장
+
+    <div
+        id="step4"
+        class="step"
+    >
+
+        <div class="num">
+            4
         </div>
+
+        <div class="stepText">
+            파일 저장
+        </div>
+
     </div>
 
 </div>
 
 
-<!-- =========================================
-     NPC
-========================================= -->
+<!-- ==================================================
+     NPC 선택
+================================================== -->
 
 <div class="card">
 
     <div class="ct">
-        ① NPC
+        ① NPC 선택
     </div>
 
     <select id="npc">
@@ -409,16 +463,104 @@ button:disabled{
             Shane
         </option>
 
+        <option value="Caroline">
+            Caroline
+        </option>
+
+        <option value="Clint">
+            Clint
+        </option>
+
+        <option value="Demetrius">
+            Demetrius
+        </option>
+
+        <option value="Dwarf">
+            Dwarf
+        </option>
+
+        <option value="Evelyn">
+            Evelyn
+        </option>
+
+        <option value="George">
+            George
+        </option>
+
+        <option value="Gus">
+            Gus
+        </option>
+
+        <option value="Jas">
+            Jas
+        </option>
+
+        <option value="Jodi">
+            Jodi
+        </option>
+
+        <option value="Kent">
+            Kent
+        </option>
+
+        <option value="Krobus">
+            Krobus
+        </option>
+
+        <option value="Lewis">
+            Lewis
+        </option>
+
+        <option value="Linus">
+            Linus
+        </option>
+
+        <option value="Marnie">
+            Marnie
+        </option>
+
+        <option value="Pam">
+            Pam
+        </option>
+
+        <option value="Pierre">
+            Pierre
+        </option>
+
+        <option value="Robin">
+            Robin
+        </option>
+
+        <option value="Sandy">
+            Sandy
+        </option>
+
+        <option value="Vincent">
+            Vincent
+        </option>
+
+        <option value="Willy">
+            Willy
+        </option>
+
+        <option value="Wizard">
+            Wizard
+        </option>
+
     </select>
+
 
     <div class="box">
 
-        <div id="target" class="name">
-            Content/Portraits/Harvey.xnb
+        <div
+            id="target"
+            class="name"
+        >
+            Portraits/Harvey
         </div>
 
         <div class="info">
-            최종 파일 이름
+            게임에서 교체 대상으로 사용할 asset
         </div>
 
     </div>
@@ -426,104 +568,53 @@ button:disabled{
 </div>
 
 
-<!-- =========================================
-     원본 XNB
-========================================= -->
+<!-- ==================================================
+     PNG 선택
+================================================== -->
 
 <div class="card">
 
     <div class="ct">
-        ② 원본 XNB
+        ② 커스텀 PNG
     </div>
 
     <div class="desc">
 
-        스타듀밸리에서 사용하는
-        원본 NPC XNB 파일을 선택합니다.
+        기존 스타듀밸리 초상화 시트와 같은
+        256 × 768 PNG를 권장합니다.
 
         <br><br>
 
-        예:
-
-        <b>Harvey.xnb</b>
+        64 × 64 초상화가
+        가로 4칸 × 세로 12칸으로 들어가는 구조입니다.
 
     </div>
+
 
     <input
-        id="xnb"
-        type="file"
-        accept=".xnb,application/octet-stream"
-        class="hidden"
-    >
-
-    <button id="xnbBtn">
-        원본 XNB 선택
-    </button>
-
-    <div
-        id="xnbBox"
-        class="box hidden"
-    >
-
-        <div
-            id="xnbName"
-            class="name"
-        ></div>
-
-        <div
-            id="xnbInfo"
-            class="info"
-        ></div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================
-     PNG
-========================================= -->
-
-<div class="card">
-
-    <div class="ct">
-        ③ 새 PNG
-    </div>
-
-    <div class="desc">
-
-        스타듀밸리 NPC 초상화 규격은
-        일반적으로 256 × 768입니다.
-
-        <br><br>
-
-        4 × 12 프레임 구조를 그대로 유지하세요.
-
-    </div>
-
-    <input
-        id="png"
+        id="pngInput"
         type="file"
         accept="image/png"
-        class="hidden"
     >
 
-    <button id="pngBtn">
-        새 PNG 선택
+
+    <button id="selectPNG">
+        PNG 선택
     </button>
 
+
     <div
-        id="pngBox"
+        id="fileBox"
         class="box hidden"
     >
 
         <div
-            id="pngName"
+            id="fileName"
             class="name"
         ></div>
 
         <div
-            id="pngInfo"
+            id="fileInfo"
             class="info"
         ></div>
 
@@ -532,9 +623,9 @@ button:disabled{
 </div>
 
 
-<!-- =========================================
-     미리보기
-========================================= -->
+<!-- ==================================================
+     PREVIEW
+================================================== -->
 
 <div
     id="previewCard"
@@ -545,25 +636,27 @@ button:disabled{
         초상화 미리보기
     </div>
 
+
     <div class="preview">
 
         <img
             id="preview"
-            alt="portrait preview"
+            alt="PNG Preview"
         >
 
     </div>
+
 
     <div class="grid">
 
         <div class="spec">
 
             <div class="sl">
-                크기
+                이미지 크기
             </div>
 
             <div
-                id="size"
+                id="imageSize"
                 class="sv"
             >
                 -
@@ -571,10 +664,11 @@ button:disabled{
 
         </div>
 
+
         <div class="spec">
 
             <div class="sl">
-                권장 프레임
+                권장 구조
             </div>
 
             <div class="sv">
@@ -588,61 +682,80 @@ button:disabled{
 </div>
 
 
-<!-- =========================================
-     XNB 변환
-========================================= -->
+<!-- ==================================================
+     설정 생성
+================================================== -->
 
 <div class="card">
 
     <div class="ct">
-        ④ XNB 변환
+        ③ 런타임 적용 설정
     </div>
+
 
     <div
         id="status"
         class="status"
     >
-        원본 XNB와 새 PNG를 선택해주세요.
+        NPC와 PNG를 선택하세요.
     </div>
 
-    <button
-        id="convert"
-        disabled
-    >
-        XNB로 변환하기
-    </button>
 
     <div
-        id="debugLog"
-        class="log hidden"
-    ></div>
+        id="assetPath"
+        class="path"
+        style="margin-top:10px"
+    >
+        Portraits/Harvey
+    </div>
+
+
+    <button
+        id="createConfig"
+        disabled
+    >
+        적용 설정 만들기
+    </button>
 
 </div>
 
 
-<!-- =========================================
-     저장
-========================================= -->
+<!-- ==================================================
+     결과
+================================================== -->
 
-<div class="card">
+<div
+    id="resultCard"
+    class="card hidden"
+>
 
     <div class="ct">
-        ⑤ 결과 저장
+        ④ 생성 결과
     </div>
 
-    <div class="desc">
 
-        변환된 XNB 파일을
-        NPC 이름으로 저장합니다.
-
+    <div
+        id="resultStatus"
+        class="status ok"
+    >
+        설정이 생성되었습니다.
     </div>
+
 
     <button
-        id="save"
-        disabled
+        id="saveConfig"
     >
-        새 Harvey.xnb 저장
+        portraits.json 저장
     </button>
+
+
+    <button
+        id="savePNG"
+        class="secondary"
+    >
+        PNG 저장
+    </button>
+
 
     <button
         id="reset"
@@ -654,76 +767,72 @@ button:disabled{
 </div>
 
 
-<!-- =========================================
-     적용 경로
-========================================= -->
+<!-- ==================================================
+     현재 구조
+================================================== -->
 
 <div class="card">
 
     <div class="ct">
-        적용 경로
+        런타임 로더 구조
     </div>
 
-    <div class="box">
 
-        <div class="name">
-            Content/Portraits
-        </div>
+    <div class="desc">
 
-        <div class="info">
+        게임 asset:
 
-            └─
-            <span id="path">
-                Harvey
-            </span>.xnb
+        <br>
 
-        </div>
+        <b id="assetText">
+            Portraits/Harvey
+        </b>
+
+        <br><br>
+
+        ↓
+
+        <br><br>
+
+        커스텀 이미지:
+
+        <br>
+
+        <b id="imageText">
+            portraits/Harvey.png
+        </b>
+
+        <br><br>
+
+        ↓
+
+        <br><br>
+
+        런타임에서 원본 초상화 대신
+        커스텀 Texture2D를 반환하는 구조입니다.
 
     </div>
 
 </div>
 
 
-<!-- =========================================
-     설명
-========================================= -->
+<!-- ==================================================
+     안내
+================================================== -->
 
 <div class="card">
 
     <div class="ct">
-        변환 방식
+        파일 구조
     </div>
 
-    <div class="desc">
 
-        1. 원본 XNB를 읽습니다.
+    <div class="path">
 
-        <br>
-
-        2. XNB 내부의 Texture2D와
-        JSON 헤더를 추출합니다.
-
-        <br>
-
-        3. 기존 PNG만 새 PNG로 교체합니다.
-
-        <br>
-
-        4. JSON 헤더는 그대로 유지합니다.
-
-        <br>
-
-        5. 새 XNB를 생성합니다.
-
-        <br><br>
-
-        생성 방식은 비압축 XNB입니다.
-
-        <br><br>
-
-        xnb.js는 XNB의 압축 해제를 지원하고,
-        패킹에서는 비압축과 LZ4를 지원합니다.
-        LZX 패킹은 지원하지 않습니다.
+PortraitRuntimeLoader/<br>
+├── portraits.json<br>
+└── portraits/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── Harvey.png
 
     </div>
 
@@ -732,7 +841,11 @@ button:disabled{
 
 <div class="footer">
 
-    Stardew Portrait Changer
+    Stardew Portrait Runtime
+
+    <br>
+
+    Custom portrait configuration tool
 
 </div>
 
@@ -740,59 +853,184 @@ button:disabled{
 </div>
 
 
-<!-- =========================================
-     XNB.JS
-========================================= -->
+<!-- ==================================================
+     SCRIPT
+================================================== -->
 
-<script type="module">
+<script>
 
-import * as XNB
-from
-"https://cdn.jsdelivr.net/npm/xnb@1.3.0/dist/xnb.module.js";
+"use strict";
 
 
-/* =========================================
-   전역 변수
-========================================= */
+/* ==================================================
+   변수
+================================================== */
 
-let xnbFile = null;
-
-let pngFile = null;
-
-let outputBlob = null;
+let selectedPNG = null;
 
 let previewURL = null;
 
+let configData = null;
 
-/* =========================================
+
+/* ==================================================
    DOM
-========================================= */
+================================================== */
 
-const $ = id =>
-    document.getElementById(id);
+const npc =
+    document.getElementById(
+        "npc"
+    );
+
+const pngInput =
+    document.getElementById(
+        "pngInput"
+    );
+
+const selectPNG =
+    document.getElementById(
+        "selectPNG"
+    );
+
+const preview =
+    document.getElementById(
+        "preview"
+    );
+
+const previewCard =
+    document.getElementById(
+        "previewCard"
+    );
+
+const fileBox =
+    document.getElementById(
+        "fileBox"
+    );
+
+const fileName =
+    document.getElementById(
+        "fileName"
+    );
+
+const fileInfo =
+    document.getElementById(
+        "fileInfo"
+    );
+
+const imageSize =
+    document.getElementById(
+        "imageSize"
+    );
+
+const status =
+    document.getElementById(
+        "status"
+    );
+
+const createConfig =
+    document.getElementById(
+        "createConfig"
+    );
+
+const resultCard =
+    document.getElementById(
+        "resultCard"
+    );
+
+const assetPath =
+    document.getElementById(
+        "assetPath"
+    );
+
+const target =
+    document.getElementById(
+        "target"
+    );
+
+const assetText =
+    document.getElementById(
+        "assetText"
+    );
+
+const imageText =
+    document.getElementById(
+        "imageText"
+    );
+
+const saveConfig =
+    document.getElementById(
+        "saveConfig"
+    );
+
+const savePNG =
+    document.getElementById(
+        "savePNG"
+    );
+
+const reset =
+    document.getElementById(
+        "reset"
+    );
 
 
-/* =========================================
+/* ==================================================
+   サイズ表示
+================================================== */
+
+function formatBytes(
+    bytes
+){
+
+    if(
+        bytes < 1024
+    ){
+
+        return bytes
+        + " B";
+
+    }
+
+
+    if(
+        bytes < 1024 * 1024
+    ){
+
+        return (
+            bytes / 1024
+        ).toFixed(2)
+        + " KB";
+
+    }
+
+
+    return (
+        bytes /
+        1024 /
+        1024
+    ).toFixed(2)
+    + " MB";
+
+}
+
+
+/* ==================================================
    상태
-========================================= */
+================================================== */
 
 function setStatus(
     text,
-    type = ""
+    type
 ){
 
-    const el =
-        $("status");
-
-    el.textContent =
+    status.textContent =
         text;
 
-    el.className =
+    status.className =
         "status";
 
     if(type){
 
-        el.classList.add(
+        status.classList.add(
             type
         );
 
@@ -801,51 +1039,13 @@ function setStatus(
 }
 
 
-/* =========================================
-   로그
-========================================= */
-
-function log(
-    text
-){
-
-    const box =
-        $("debugLog");
-
-    box.classList.remove(
-        "hidden"
-    );
-
-    box.textContent +=
-        text
-        + "\n";
-
-}
-
-
-/* =========================================
-   로그 초기화
-========================================= */
-
-function clearLog(){
-
-    const box =
-        $("debugLog");
-
-    box.textContent = "";
-
-    box.classList.add(
-        "hidden"
-    );
-
-}
-
-
-/* =========================================
+/* ==================================================
    단계
-========================================= */
+================================================== */
 
-function step(n){
+function setStep(
+    number
+){
 
     for(
         let i = 1;
@@ -854,14 +1054,19 @@ function step(n){
     ){
 
         const el =
-            $("s" + i);
+            document.getElementById(
+                "step" + i
+            );
 
         el.classList.remove(
             "active",
             "done"
         );
 
-        if(i < n){
+
+        if(
+            i < number
+        ){
 
             el.classList.add(
                 "done"
@@ -869,7 +1074,10 @@ function step(n){
 
         }
 
-        if(i === n){
+
+        if(
+            i === number
+        ){
 
             el.classList.add(
                 "active"
@@ -882,222 +1090,143 @@ function step(n){
 }
 
 
-/* =========================================
-   용량
-========================================= */
-
-function bytes(
-    n
-){
-
-    if(!n)
-        return "0 B";
-
-    const units = [
-        "B",
-        "KB",
-        "MB",
-        "GB"
-    ];
-
-    const i =
-        Math.floor(
-            Math.log(n) /
-            Math.log(1024)
-        );
-
-    return (
-        n /
-        Math.pow(
-            1024,
-            i
-        )
-    ).toFixed(2)
-    + " "
-    + units[i];
-
-}
-
-
-/* =========================================
-   확장자 제거
-========================================= */
-
-function removeExt(
-    name
-){
-
-    return name.replace(
-        /\.xnb$/i,
-        ""
-    );
-
-}
-
-
-/* =========================================
+/* ==================================================
    NPC 변경
-========================================= */
+================================================== */
 
 function updateNPC(){
 
-    const npc =
-        $("npc").value;
+    const name =
+        npc.value;
 
-    $("target").textContent =
-        "Content/Portraits/"
-        + npc
-        + ".xnb";
 
-    $("path").textContent =
-        npc;
+    const asset =
+        "Portraits/"
+        + name;
 
-    $("save").textContent =
-        "새 "
-        + npc
-        + ".xnb 저장";
+
+    const image =
+        "portraits/"
+        + name
+        + ".png";
+
+
+    target.textContent =
+        asset;
+
+
+    assetPath.textContent =
+        asset;
+
+
+    assetText.textContent =
+        asset;
+
+
+    imageText.textContent =
+        image;
+
+
+    if(
+        selectedPNG
+    ){
+
+        createConfig.disabled =
+            false;
+
+    }
 
 }
 
-$("npc").addEventListener(
+
+npc.addEventListener(
     "change",
-    updateNPC
-);
+    function(){
 
+        updateNPC();
 
-/* =========================================
-   버튼
-========================================= */
-
-$("xnbBtn").onclick = () =>
-    $("xnb").click();
-
-$("pngBtn").onclick = () =>
-    $("png").click();
-
-
-/* =========================================
-   XNB 선택
-========================================= */
-
-$("xnb").addEventListener(
-    "change",
-    async function(){
-
-        const file =
-            this.files[0];
-
-        if(!file)
-            return;
-
-        xnbFile =
-            file;
-
-        $("xnbBox")
+        resultCard
             .classList
-            .remove("hidden");
-
-        $("xnbName").textContent =
-            file.name;
-
-        $("xnbInfo").textContent =
-            bytes(file.size)
-            + " · XNB";
-
-
-        try{
-
-            setStatus(
-                "XNB를 검사하는 중...",
-                "warn"
+            .add(
+                "hidden"
             );
-
-
-            const content =
-                await XNB.unpackToContent(
-                    file
-                );
-
-
-            if(
-                !content ||
-                content.type !== "png"
-            ){
-
-                throw new Error(
-                    "이 XNB에서 Texture2D PNG를 찾지 못했습니다."
-                );
-
-            }
-
-
-            setStatus(
-                "원본 XNB를 정상적으로 읽었습니다. 새 PNG를 선택하세요.",
-                "ok"
-            );
-
-
-            step(2);
-
-
-            checkReady();
-
-        }
-        catch(error){
-
-            console.error(
-                error
-            );
-
-            setStatus(
-                "XNB 읽기 실패: "
-                + (
-                    error.message ||
-                    error
-                ),
-                "err"
-            );
-
-        }
 
     }
 );
 
 
-/* =========================================
+/* ==================================================
    PNG 선택
-========================================= */
+================================================== */
 
-$("png").addEventListener(
+selectPNG.addEventListener(
+    "click",
+    function(){
+
+        pngInput.click();
+
+    }
+);
+
+
+/* ==================================================
+   PNG 읽기
+================================================== */
+
+pngInput.addEventListener(
     "change",
     function(){
 
         const file =
             this.files[0];
 
-        if(!file)
+
+        if(!file){
+
             return;
 
+        }
 
-        pngFile =
+
+        if(
+            file.type !== "image/png"
+        ){
+
+            setStatus(
+                "PNG 파일만 선택할 수 있습니다.",
+                "err"
+            );
+
+            return;
+
+        }
+
+
+        selectedPNG =
             file;
 
 
-        $("pngBox")
+        fileBox
             .classList
-            .remove("hidden");
+            .remove(
+                "hidden"
+            );
 
 
-        $("pngName").textContent =
+        fileName.textContent =
             file.name;
 
 
-        $("pngInfo").textContent =
-            bytes(file.size)
+        fileInfo.textContent =
+            formatBytes(
+                file.size
+            )
             + " · PNG";
 
 
-        if(previewURL){
+        if(
+            previewURL
+        ){
 
             URL.revokeObjectURL(
                 previewURL
@@ -1112,30 +1241,32 @@ $("png").addEventListener(
             );
 
 
-        $("preview").src =
+        preview.src =
             previewURL;
 
 
-        $("preview").style.display =
+        preview.style.display =
             "block";
 
 
-        $("previewCard")
+        previewCard
             .classList
-            .remove("hidden");
+            .remove(
+                "hidden"
+            );
 
 
-        $("preview").onload =
+        preview.onload =
             function(){
 
                 const width =
-                    this.naturalWidth;
+                    preview.naturalWidth;
 
                 const height =
-                    this.naturalHeight;
+                    preview.naturalHeight;
 
 
-                $("size").textContent =
+                imageSize.textContent =
                     width
                     + " × "
                     + height;
@@ -1147,7 +1278,7 @@ $("png").addEventListener(
                 ){
 
                     setStatus(
-                        "PNG가 256 × 768입니다. 변환할 준비가 되었습니다.",
+                        "PNG 정상. 256 × 768 초상화 시트입니다.",
                         "ok"
                     );
 
@@ -1155,20 +1286,22 @@ $("png").addEventListener(
                 else{
 
                     setStatus(
-                        "PNG 크기: "
+                        "PNG 크기는 "
                         + width
                         + " × "
                         + height
-                        + " · 권장 크기: 256 × 768",
+                        + "입니다. 권장 크기는 256 × 768입니다.",
                         "warn"
                     );
 
                 }
 
 
-                step(2);
+                createConfig.disabled =
+                    false;
 
-                checkReady();
+
+                setStep(2);
 
             };
 
@@ -1176,250 +1309,138 @@ $("png").addEventListener(
 );
 
 
-/* =========================================
-   준비 확인
-========================================= */
+/* ==================================================
+   설정 생성
+================================================== */
 
-function checkReady(){
+createConfig.addEventListener(
+    "click",
+    function(){
 
-    $("convert").disabled =
-        !(
-            xnbFile &&
-            pngFile
+        if(
+            !selectedPNG
+        ){
+
+            setStatus(
+                "먼저 PNG를 선택하세요.",
+                "err"
+            );
+
+            return;
+
+        }
+
+
+        const name =
+            npc.value;
+
+
+        configData = {
+
+            [name]:
+                "portraits/"
+                + name
+                + ".png"
+
+        };
+
+
+        resultCard
+            .classList
+            .remove(
+                "hidden"
+            );
+
+
+        document
+            .getElementById(
+                "resultStatus"
+            )
+            .textContent =
+                name
+                + " 초상화 런타임 설정이 생성되었습니다.";
+
+
+        setStep(4);
+
+
+        setStatus(
+            "설정 생성 완료.",
+            "ok"
         );
 
-}
+    }
+);
 
 
-/* =========================================
-   Blob 변환
-========================================= */
+/* ==================================================
+   파일 다운로드
+================================================== */
 
-async function toBlob(
-    value
+function downloadFile(
+    blob,
+    filename
 ){
 
-    if(!value)
-        return null;
-
-
-    if(
-        value instanceof Blob
-    ){
-
-        return value;
-
-    }
-
-
-    if(
-        value instanceof ArrayBuffer
-    ){
-
-        return new Blob(
-            [value],
-            {
-                type:
-                    "application/octet-stream"
-            }
+    const url =
+        URL.createObjectURL(
+            blob
         );
 
-    }
 
-
-    if(
-        value instanceof Uint8Array
-    ){
-
-        return new Blob(
-            [value],
-            {
-                type:
-                    "application/octet-stream"
-            }
+    const link =
+        document.createElement(
+            "a"
         );
 
-    }
+
+    link.href =
+        url;
 
 
-    if(
-        value?.data
-    ){
-
-        return toBlob(
-            value.data
-        );
-
-    }
+    link.download =
+        filename;
 
 
-    if(
-        value?.buffer
-    ){
-
-        return toBlob(
-            value.buffer
-        );
-
-    }
+    link.style.display =
+        "none";
 
 
-    return null;
-
-}
-
-
-/* =========================================
-   패킹 결과에서 XNB 찾기
-========================================= */
-
-async function extractPackResult(
-    result
-){
-
-    log(
-        "pack 결과 타입: "
-        + (
-            result?.constructor?.name ||
-            typeof result
-        )
+    document.body.appendChild(
+        link
     );
 
 
-    /* ------------------------------
-       직접 Blob
-    ------------------------------ */
-
-    const direct =
-        await toBlob(
-            result
-        );
+    link.click();
 
 
-    if(direct){
-
-        return direct;
-
-    }
+    link.remove();
 
 
-    /* ------------------------------
-       배열
-    ------------------------------ */
+    setTimeout(
+        function(){
 
-    if(
-        Array.isArray(result)
-    ){
-
-        log(
-            "pack 결과 배열 길이: "
-            + result.length
-        );
-
-
-        for(
-            const item of result
-        ){
-
-            const blob =
-                await toBlob(
-                    item
-                );
-
-
-            if(blob){
-
-                log(
-                    "배열 결과에서 바이너리 발견: "
-                    + bytes(blob.size)
-                );
-
-                return blob;
-
-            }
-
-        }
-
-    }
-
-
-    /* ------------------------------
-       객체 내부 검색
-    ------------------------------ */
-
-    if(
-        result &&
-        typeof result === "object"
-    ){
-
-        const keys =
-            Object.keys(
-                result
+            URL.revokeObjectURL(
+                url
             );
 
-
-        log(
-            "pack 결과 키: "
-            + keys.join(", ")
-        );
-
-
-        const possibleKeys = [
-
-            "data",
-            "blob",
-            "file",
-            "buffer",
-            "output",
-            "result",
-            "xnb"
-
-        ];
-
-
-        for(
-            const key of possibleKeys
-        ){
-
-            if(
-                result[key]
-            ){
-
-                const blob =
-                    await toBlob(
-                        result[key]
-                    );
-
-
-                if(blob){
-
-                    return blob;
-
-                }
-
-            }
-
-        }
-
-    }
-
-
-    return null;
+        },
+        1500
+    );
 
 }
 
 
-/* =========================================
-   PNG → XNB
-========================================= */
+/* ==================================================
+   JSON 저장
+================================================== */
 
-$("convert").addEventListener(
+saveConfig.addEventListener(
     "click",
-    async function(){
+    function(){
 
         if(
-            !xnbFile ||
-            !pngFile
+            !configData
         ){
 
             return;
@@ -1427,649 +1448,134 @@ $("convert").addEventListener(
         }
 
 
-        this.disabled =
-            true;
-
-
-        $("save").disabled =
-            true;
-
-
-        outputBlob =
-            null;
-
-
-        clearLog();
-
-
-        step(3);
-
-
-        try{
-
-            /* ==========================
-               1. 원본 XNB 언팩
-            ========================== */
-
-            setStatus(
-                "원본 XNB를 분석하는 중...",
-                "warn"
+        const json =
+            JSON.stringify(
+                configData,
+                null,
+                2
             );
 
 
-            log(
-                "원본: "
-                + xnbFile.name
-            );
-
-
-            const originalFiles =
-                await XNB.unpackToFiles(
-                    xnbFile,
-                    {
-                        fileName:
-                            removeExt(
-                                xnbFile.name
-                            ),
-
-                        contentOnly:
-                            false,
-
-                        yaml:
-                            false
-                    }
-                );
-
-
-            if(
-                !Array.isArray(
-                    originalFiles
-                )
-            ){
-
-                throw new Error(
-                    "XNB 언팩 결과가 배열이 아닙니다."
-                );
-
-            }
-
-
-            log(
-                "언팩 파일 수: "
-                + originalFiles.length
-            );
-
-
-            /* ==========================
-               2. PNG + JSON 확인
-            ========================== */
-
-            let pngFound =
-                false;
-
-            let jsonFound =
-                false;
-
-
-            for(
-                const item of originalFiles
-            ){
-
-                log(
-                    "추출 파일: "
-                    + (
-                        item.extension ||
-                        "unknown"
-                    )
-                    + " / "
-                    + bytes(
-                        item.data?.size ||
-                        item.data?.byteLength ||
-                        0
-                    )
-                );
-
-
-                if(
-                    (
-                        item.extension ||
-                        ""
-                    ).toLowerCase()
-                    === "png"
-                ){
-
-                    pngFound =
-                        true;
-
+        const blob =
+            new Blob(
+                [json],
+                {
+                    type:
+                        "application/json"
                 }
-
-
-                if(
-                    (
-                        item.extension ||
-                        ""
-                    ).toLowerCase()
-                    === "json"
-                ){
-
-                    jsonFound =
-                        true;
-
-                }
-
-            }
-
-
-            if(!pngFound){
-
-                throw new Error(
-                    "원본 XNB에서 PNG Texture2D를 찾지 못했습니다."
-                );
-
-            }
-
-
-            if(!jsonFound){
-
-                throw new Error(
-                    "원본 XNB의 JSON 헤더를 찾지 못했습니다."
-                );
-
-            }
-
-
-            /* ==========================
-               3. 패킹용 파일 생성
-            ========================== */
-
-            const base =
-                removeExt(
-                    xnbFile.name
-                );
-
-
-            const packFiles =
-                [];
-
-
-            let replaced =
-                false;
-
-
-            for(
-                const item of originalFiles
-            ){
-
-                const ext =
-                    (
-                        item.extension ||
-                        ""
-                    ).toLowerCase();
-
-
-                /* ----------------------
-                   PNG 교체
-                ---------------------- */
-
-                if(
-                    ext === "png"
-                ){
-
-                    packFiles.push({
-
-                        name:
-                            base
-                            + ".png",
-
-                        data:
-                            pngFile
-
-                    });
-
-
-                    replaced =
-                        true;
-
-                }
-
-
-                /* ----------------------
-                   JSON 유지
-                ---------------------- */
-
-                else if(
-                    ext === "json"
-                ){
-
-                    packFiles.push({
-
-                        name:
-                            base
-                            + ".json",
-
-                        data:
-                            item.data
-
-                    });
-
-                }
-
-
-                /* ----------------------
-                   기타 파일 유지
-                ---------------------- */
-
-                else{
-
-                    packFiles.push({
-
-                        name:
-                            base
-                            + "."
-                            + ext,
-
-                        data:
-                            item.data
-
-                    });
-
-                }
-
-            }
-
-
-            if(!replaced){
-
-                throw new Error(
-                    "새 PNG 교체에 실패했습니다."
-                );
-
-            }
-
-
-            log(
-                "패킹 파일:"
             );
 
 
-            for(
-                const f of packFiles
-            ){
-
-                log(
-                    " - "
-                    + f.name
-                );
-
-            }
-
-
-            /* ==========================
-               4. XNB 패킹
-            ========================== */
-
-            setStatus(
-                "새 PNG를 넣어 XNB를 생성하는 중...",
-                "warn"
-            );
-
-
-            /*
-             * 중요:
-             *
-             * debug:true를 사용하지 않습니다.
-             *
-             * debug:true는 성공/실패 결과
-             * 구조를 별도로 반환합니다.
-             *
-             * 여기서는 실제 XNB 결과만 받습니다.
-             */
-
-
-            const packed =
-                await XNB.pack(
-                    packFiles,
-                    {
-                        compression:
-                            "none",
-
-                        debug:
-                            false
-                    }
-                );
-
-
-            log(
-                "패킹 완료"
-            );
-
-
-            /* ==========================
-               5. 반환값에서 Blob 추출
-            ========================== */
-
-            const blob =
-                await extractPackResult(
-                    packed
-                );
-
-
-            if(!blob){
-
-                throw new Error(
-                    "패커가 XNB 바이너리를 반환하지 않았습니다."
-                );
-
-            }
-
-
-            if(blob.size < 10){
-
-                throw new Error(
-                    "생성된 XNB 파일 크기가 비정상적으로 작습니다."
-                );
-
-            }
-
-
-            /* ==========================
-               6. XNB 헤더 검사
-            ========================== */
-
-            const buffer =
-                await blob.arrayBuffer();
-
-
-            const bytesView =
-                new Uint8Array(
-                    buffer
-                );
-
-
-            const magic =
-                String.fromCharCode(
-                    bytesView[0],
-                    bytesView[1],
-                    bytesView[2],
-                    bytesView[3]
-                );
-
-
-            log(
-                "생성 헤더: "
-                + magic
-            );
-
-
-            if(
-                magic !== "XNBw"
-            ){
-
-                throw new Error(
-                    "생성된 파일이 정상적인 XNBw 헤더가 아닙니다."
-                );
-
-            }
-
-
-            const version =
-                bytesView[4];
-
-
-            const flags =
-                bytesView[5];
-
-
-            log(
-                "XNB 버전: "
-                + version
-            );
-
-
-            log(
-                "XNB 플래그: "
-                + flags
-            );
-
-
-            /* ==========================
-               7. 최종 결과
-            ========================== */
-
-            outputBlob =
-                new Blob(
-                    [buffer],
-                    {
-                        type:
-                            "application/octet-stream"
-                    }
-                );
-
-
-            setStatus(
-
-                "XNB 변환 성공! "
-                + bytes(
-                    outputBlob.size
-                )
-                + " · XNB 헤더 정상",
-
-                "ok"
-
-            );
-
-
-            $("save").disabled =
-                false;
-
-
-            step(4);
-
-        }
-        catch(error){
-
-            console.error(
-                error
-            );
-
-
-            outputBlob =
-                null;
-
-
-            setStatus(
-
-                "XNB 변환 실패: "
-                + (
-                    error?.message ||
-                    error
-                ),
-
-                "err"
-
-            );
-
-
-            log(
-                "오류: "
-                + (
-                    error?.stack ||
-                    error
-                )
-            );
-
-
-            step(2);
-
-        }
-        finally{
-
-            this.disabled =
-                false;
-
-        }
+        downloadFile(
+            blob,
+            "portraits.json"
+        );
 
     }
 );
 
 
-/* =========================================
-   저장
-========================================= */
+/* ==================================================
+   PNG 저장
+================================================== */
 
-$("save").addEventListener(
+savePNG.addEventListener(
     "click",
     function(){
 
-        if(!outputBlob)
+        if(
+            !selectedPNG
+        ){
+
             return;
 
-
-        const npc =
-            $("npc").value;
+        }
 
 
-        const fileName =
-            npc
-            + ".xnb";
-
-
-        const url =
-            URL.createObjectURL(
-                outputBlob
-            );
-
-
-        const link =
-            document.createElement(
-                "a"
-            );
-
-
-        link.href =
-            url;
-
-
-        link.download =
-            fileName;
-
-
-        link.style.display =
-            "none";
-
-
-        document.body.appendChild(
-            link
-        );
-
-
-        link.click();
-
-
-        link.remove();
-
-
-        setTimeout(
-            function(){
-
-                URL.revokeObjectURL(
-                    url
-                );
-
-            },
-            1500
-        );
-
-
-        setStatus(
-
-            fileName
-            + " 저장을 시작했습니다. 파일 앱에서 확인하세요.",
-
-            "ok"
-
+        downloadFile(
+            selectedPNG,
+            npc.value
+            + ".png"
         );
 
     }
 );
 
 
-/* =========================================
+/* ==================================================
    초기화
-========================================= */
+================================================== */
 
-$("reset").addEventListener(
+reset.addEventListener(
     "click",
     function(){
 
-        xnbFile =
-            null;
-
-        pngFile =
-            null;
-
-        outputBlob =
+        selectedPNG =
             null;
 
 
-        $("xnb").value =
-            "";
-
-        $("png").value =
-            "";
+        configData =
+            null;
 
 
-        $("xnbBox")
-            .classList
-            .add("hidden");
-
-
-        $("pngBox")
-            .classList
-            .add("hidden");
-
-
-        $("previewCard")
-            .classList
-            .add("hidden");
-
-
-        $("preview").src =
+        pngInput.value =
             "";
 
 
-        $("preview").style.display =
-            "none";
+        fileBox
+            .classList
+            .add(
+                "hidden"
+            );
 
 
-        $("save").disabled =
+        previewCard
+            .classList
+            .add(
+                "hidden"
+            );
+
+
+        resultCard
+            .classList
+            .add(
+                "hidden"
+            );
+
+
+        preview.src =
+            "";
+
+
+        imageSize.textContent =
+            "-";
+
+
+        createConfig.disabled =
             true;
 
 
-        clearLog();
-
-
         setStatus(
-            "원본 XNB와 새 PNG를 선택해주세요."
+            "NPC와 PNG를 선택하세요."
         );
 
 
-        step(1);
+        setStep(1);
 
 
-        checkReady();
+        updateNPC();
 
     }
 );
 
 
-/* =========================================
-   초기 실행
-========================================= */
+/* ==================================================
+   시작
+================================================== */
 
 updateNPC();
 
-checkReady();
+setStep(1);
 
 </script>
 

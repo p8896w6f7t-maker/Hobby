@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0"
+>
 
 <title>Stardew Portrait Changer</title>
 
@@ -13,7 +18,8 @@
     -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
     margin:0;
     padding:0;
     background:#101218;
@@ -257,391 +263,486 @@ button:disabled{
     color:#fff;
 }
 
+.log{
+    margin-top:10px;
+    padding:10px;
+    background:#0d1015;
+    border-radius:10px;
+    font-family:monospace;
+    font-size:10px;
+    line-height:1.6;
+    color:#777e8c;
+    white-space:pre-wrap;
+    word-break:break-all;
+    max-height:180px;
+    overflow:auto;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- ==============================
-         HEADER
-    =============================== -->
 
-    <div class="header">
+<!-- =========================================
+     HEADER
+========================================= -->
 
-        <div class="logo">
-            🥔
-        </div>
+<div class="header">
 
-        <div class="title">
-            Stardew Portrait Changer
-        </div>
-
-        <div class="sub">
-            PNG → 실제 XNB 변환 테스트
-        </div>
-
+    <div class="logo">
+        🥔
     </div>
 
-
-    <!-- ==============================
-         작업 순서
-    =============================== -->
-
-    <div class="card">
-
-        <div class="ct">
-            작업 순서
-        </div>
-
-        <div id="s1" class="step active">
-            <div class="num">1</div>
-            <div class="stepText">
-                원본 XNB 선택
-            </div>
-        </div>
-
-        <div id="s2" class="step">
-            <div class="num">2</div>
-            <div class="stepText">
-                새 PNG 선택
-            </div>
-        </div>
-
-        <div id="s3" class="step">
-            <div class="num">3</div>
-            <div class="stepText">
-                XNB 변환
-            </div>
-        </div>
-
-        <div id="s4" class="step">
-            <div class="num">4</div>
-            <div class="stepText">
-                새 XNB 저장
-            </div>
-        </div>
-
+    <div class="title">
+        Stardew Portrait Changer
     </div>
 
-
-    <!-- ==============================
-         NPC 선택
-    =============================== -->
-
-    <div class="card">
-
-        <div class="ct">
-            ① NPC
-        </div>
-
-        <select id="npc">
-
-            <option>Harvey</option>
-            <option>Abigail</option>
-            <option>Alex</option>
-            <option>Elliott</option>
-            <option>Emily</option>
-            <option>Haley</option>
-            <option>Leah</option>
-            <option>Maru</option>
-            <option>Penny</option>
-            <option>Sam</option>
-            <option>Sebastian</option>
-            <option>Shane</option>
-
-        </select>
-
-        <div class="box">
-
-            <div id="target" class="name">
-                Content/Portraits/Harvey.xnb
-            </div>
-
-            <div class="info">
-                최종 파일 이름
-            </div>
-
-        </div>
-
+    <div class="sub">
+        PNG → XNB 변환기
     </div>
 
+</div>
 
-    <!-- ==============================
-         원본 XNB
-    =============================== -->
 
-    <div class="card">
+<!-- =========================================
+     진행 단계
+========================================= -->
 
-        <div class="ct">
-            ② 원본 XNB
-        </div>
+<div class="card">
 
-        <div class="desc">
+    <div class="ct">
+        작업 순서
+    </div>
 
-            현재 스타듀밸리에서 사용하는
-            원본 Harvey.xnb를 선택합니다.
-
-            이 파일의 XNB 구조를 읽어서
-            새 PNG를 다시 XNB로 패킹합니다.
-
-        </div>
-
-        <input
-            id="xnb"
-            type="file"
-            accept=".xnb,application/octet-stream"
-            class="hidden"
-        >
-
-        <button id="xnbBtn">
+    <div id="s1" class="step active">
+        <div class="num">1</div>
+        <div class="stepText">
             원본 XNB 선택
-        </button>
-
-        <div id="xnbBox" class="box hidden">
-
-            <div id="xnbName" class="name"></div>
-
-            <div id="xnbInfo" class="info"></div>
-
         </div>
-
     </div>
 
-
-    <!-- ==============================
-         새 PNG
-    =============================== -->
-
-    <div class="card">
-
-        <div class="ct">
-            ③ 새 PNG
-        </div>
-
-        <div class="desc">
-
-            256 × 768 PNG를 권장합니다.
-
-            기존에 사용하던 Harvey.png를
-            선택하면 됩니다.
-
-        </div>
-
-        <input
-            id="png"
-            type="file"
-            accept="image/png"
-            class="hidden"
-        >
-
-        <button id="pngBtn">
+    <div id="s2" class="step">
+        <div class="num">2</div>
+        <div class="stepText">
             새 PNG 선택
-        </button>
-
-        <div id="pngBox" class="box hidden">
-
-            <div id="pngName" class="name"></div>
-
-            <div id="pngInfo" class="info"></div>
-
         </div>
-
     </div>
 
-
-    <!-- ==============================
-         미리보기
-    =============================== -->
-
-    <div id="previewCard" class="card hidden">
-
-        <div class="ct">
-            초상화 미리보기
+    <div id="s3" class="step">
+        <div class="num">3</div>
+        <div class="stepText">
+            XNB 변환
         </div>
-
-        <div class="preview">
-
-            <img id="preview">
-
-        </div>
-
-        <div class="grid">
-
-            <div class="spec">
-
-                <div class="sl">
-                    크기
-                </div>
-
-                <div id="size" class="sv">
-                    -
-                </div>
-
-            </div>
-
-            <div class="spec">
-
-                <div class="sl">
-                    권장 프레임
-                </div>
-
-                <div class="sv">
-                    4 × 12
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
 
-
-    <!-- ==============================
-         XNB 변환
-    =============================== -->
-
-    <div class="card">
-
-        <div class="ct">
-            ④ XNB 변환
+    <div id="s4" class="step">
+        <div class="num">4</div>
+        <div class="stepText">
+            새 XNB 저장
         </div>
-
-        <div id="status" class="status">
-
-            원본 XNB와 새 PNG를 선택해주세요.
-
-        </div>
-
-        <button
-            id="convert"
-            disabled
-        >
-            XNB로 변환하기
-        </button>
-
     </div>
 
+</div>
 
-    <!-- ==============================
-         결과 저장
-    =============================== -->
 
-    <div class="card">
+<!-- =========================================
+     NPC
+========================================= -->
 
-        <div class="ct">
-            ⑤ 결과 저장
-        </div>
+<div class="card">
 
-        <div class="desc">
-
-            변환된 파일은 선택한 NPC 이름의
-            .xnb로 저장됩니다.
-
-        </div>
-
-        <button
-            id="save"
-            disabled
-        >
-            새 Harvey.xnb 저장
-        </button>
-
-        <button
-            id="reset"
-            class="secondary"
-        >
-            처음부터 다시
-        </button>
-
+    <div class="ct">
+        ① NPC
     </div>
 
+    <select id="npc">
 
-    <!-- ==============================
-         적용 경로
-    =============================== -->
+        <option value="Harvey">
+            Harvey
+        </option>
 
-    <div class="card">
+        <option value="Abigail">
+            Abigail
+        </option>
 
-        <div class="ct">
-            적용 경로
+        <option value="Alex">
+            Alex
+        </option>
+
+        <option value="Elliott">
+            Elliott
+        </option>
+
+        <option value="Emily">
+            Emily
+        </option>
+
+        <option value="Haley">
+            Haley
+        </option>
+
+        <option value="Leah">
+            Leah
+        </option>
+
+        <option value="Maru">
+            Maru
+        </option>
+
+        <option value="Penny">
+            Penny
+        </option>
+
+        <option value="Sam">
+            Sam
+        </option>
+
+        <option value="Sebastian">
+            Sebastian
+        </option>
+
+        <option value="Shane">
+            Shane
+        </option>
+
+    </select>
+
+    <div class="box">
+
+        <div id="target" class="name">
+            Content/Portraits/Harvey.xnb
         </div>
 
-        <div class="box">
-
-            <div class="name">
-                Content
-            </div>
-
-            <div class="info">
-
-                └─ Portraits<br>
-
-                &nbsp;&nbsp;&nbsp;└─
-                <span id="path">
-                    Harvey
-                </span>.xnb
-
-            </div>
-
+        <div class="info">
+            최종 파일 이름
         </div>
-
-    </div>
-
-
-    <!-- ==============================
-         변환 방식
-    =============================== -->
-
-    <div class="card">
-
-        <div class="ct">
-            변환 방식
-        </div>
-
-        <div class="desc">
-
-            원본 XNB를 먼저 언팩한 뒤
-            그 안의 Texture2D PNG를
-            새 PNG로 교체하고 다시 XNB로 패킹합니다.
-
-            <br><br>
-
-            이 웹앱은
-            <b>xnb.js</b>를 사용합니다.
-
-            <br><br>
-
-            현재 브라우저 패커는
-            LZX로 다시 압축하지 않고
-            비압축 또는 LZ4 방식으로 생성할 수 있으므로,
-
-            이번 테스트에서는
-            <b>비압축 XNB</b>로 생성합니다.
-
-            <br><br>
-
-            Stardew에서 실제 로딩되는지 확인하는 것이
-            다음 테스트입니다.
-
-        </div>
-
-    </div>
-
-
-    <div class="footer">
-
-        Stardew Portrait Changer · XNB conversion prototype
 
     </div>
 
 </div>
 
 
-<!-- ==============================
+<!-- =========================================
+     원본 XNB
+========================================= -->
+
+<div class="card">
+
+    <div class="ct">
+        ② 원본 XNB
+    </div>
+
+    <div class="desc">
+
+        스타듀밸리에서 사용하는
+        원본 NPC XNB 파일을 선택합니다.
+
+        <br><br>
+
+        예:
+
+        <b>Harvey.xnb</b>
+
+    </div>
+
+    <input
+        id="xnb"
+        type="file"
+        accept=".xnb,application/octet-stream"
+        class="hidden"
+    >
+
+    <button id="xnbBtn">
+        원본 XNB 선택
+    </button>
+
+    <div
+        id="xnbBox"
+        class="box hidden"
+    >
+
+        <div
+            id="xnbName"
+            class="name"
+        ></div>
+
+        <div
+            id="xnbInfo"
+            class="info"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     PNG
+========================================= -->
+
+<div class="card">
+
+    <div class="ct">
+        ③ 새 PNG
+    </div>
+
+    <div class="desc">
+
+        스타듀밸리 NPC 초상화 규격은
+        일반적으로 256 × 768입니다.
+
+        <br><br>
+
+        4 × 12 프레임 구조를 그대로 유지하세요.
+
+    </div>
+
+    <input
+        id="png"
+        type="file"
+        accept="image/png"
+        class="hidden"
+    >
+
+    <button id="pngBtn">
+        새 PNG 선택
+    </button>
+
+    <div
+        id="pngBox"
+        class="box hidden"
+    >
+
+        <div
+            id="pngName"
+            class="name"
+        ></div>
+
+        <div
+            id="pngInfo"
+            class="info"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     미리보기
+========================================= -->
+
+<div
+    id="previewCard"
+    class="card hidden"
+>
+
+    <div class="ct">
+        초상화 미리보기
+    </div>
+
+    <div class="preview">
+
+        <img
+            id="preview"
+            alt="portrait preview"
+        >
+
+    </div>
+
+    <div class="grid">
+
+        <div class="spec">
+
+            <div class="sl">
+                크기
+            </div>
+
+            <div
+                id="size"
+                class="sv"
+            >
+                -
+            </div>
+
+        </div>
+
+        <div class="spec">
+
+            <div class="sl">
+                권장 프레임
+            </div>
+
+            <div class="sv">
+                4 × 12
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     XNB 변환
+========================================= -->
+
+<div class="card">
+
+    <div class="ct">
+        ④ XNB 변환
+    </div>
+
+    <div
+        id="status"
+        class="status"
+    >
+        원본 XNB와 새 PNG를 선택해주세요.
+    </div>
+
+    <button
+        id="convert"
+        disabled
+    >
+        XNB로 변환하기
+    </button>
+
+    <div
+        id="debugLog"
+        class="log hidden"
+    ></div>
+
+</div>
+
+
+<!-- =========================================
+     저장
+========================================= -->
+
+<div class="card">
+
+    <div class="ct">
+        ⑤ 결과 저장
+    </div>
+
+    <div class="desc">
+
+        변환된 XNB 파일을
+        NPC 이름으로 저장합니다.
+
+    </div>
+
+    <button
+        id="save"
+        disabled
+    >
+        새 Harvey.xnb 저장
+    </button>
+
+    <button
+        id="reset"
+        class="secondary"
+    >
+        처음부터 다시
+    </button>
+
+</div>
+
+
+<!-- =========================================
+     적용 경로
+========================================= -->
+
+<div class="card">
+
+    <div class="ct">
+        적용 경로
+    </div>
+
+    <div class="box">
+
+        <div class="name">
+            Content/Portraits
+        </div>
+
+        <div class="info">
+
+            └─
+            <span id="path">
+                Harvey
+            </span>.xnb
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     설명
+========================================= -->
+
+<div class="card">
+
+    <div class="ct">
+        변환 방식
+    </div>
+
+    <div class="desc">
+
+        1. 원본 XNB를 읽습니다.
+
+        <br>
+
+        2. XNB 내부의 Texture2D와
+        JSON 헤더를 추출합니다.
+
+        <br>
+
+        3. 기존 PNG만 새 PNG로 교체합니다.
+
+        <br>
+
+        4. JSON 헤더는 그대로 유지합니다.
+
+        <br>
+
+        5. 새 XNB를 생성합니다.
+
+        <br><br>
+
+        생성 방식은 비압축 XNB입니다.
+
+        <br><br>
+
+        xnb.js는 XNB의 압축 해제를 지원하고,
+        패킹에서는 비압축과 LZ4를 지원합니다.
+        LZX 패킹은 지원하지 않습니다.
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+
+    Stardew Portrait Changer
+
+</div>
+
+
+</div>
+
+
+<!-- =========================================
      XNB.JS
-============================== -->
+========================================= -->
 
 <script type="module">
 
@@ -650,13 +751,9 @@ from
 "https://cdn.jsdelivr.net/npm/xnb@1.3.0/dist/xnb.module.js";
 
 
-/* ==========================================
-   기본 변수
-========================================== */
-
-const $ = id =>
-    document.getElementById(id);
-
+/* =========================================
+   전역 변수
+========================================= */
 
 let xnbFile = null;
 
@@ -667,31 +764,86 @@ let outputBlob = null;
 let previewURL = null;
 
 
-/* ==========================================
-   상태 메시지
-========================================== */
+/* =========================================
+   DOM
+========================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
+
+/* =========================================
+   상태
+========================================= */
 
 function setStatus(
     text,
     type = ""
 ){
 
-    $("status").textContent = text;
+    const el =
+        $("status");
 
-    $("status").className =
-        "status" +
-        (
+    el.textContent =
+        text;
+
+    el.className =
+        "status";
+
+    if(type){
+
+        el.classList.add(
             type
-            ? " " + type
-            : ""
         );
+
+    }
 
 }
 
 
-/* ==========================================
-   단계 표시
-========================================== */
+/* =========================================
+   로그
+========================================= */
+
+function log(
+    text
+){
+
+    const box =
+        $("debugLog");
+
+    box.classList.remove(
+        "hidden"
+    );
+
+    box.textContent +=
+        text
+        + "\n";
+
+}
+
+
+/* =========================================
+   로그 초기화
+========================================= */
+
+function clearLog(){
+
+    const box =
+        $("debugLog");
+
+    box.textContent = "";
+
+    box.classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================
+   단계
+========================================= */
 
 function step(n){
 
@@ -730,11 +882,13 @@ function step(n){
 }
 
 
-/* ==========================================
-   파일 크기
-========================================== */
+/* =========================================
+   용량
+========================================= */
 
-function bytes(n){
+function bytes(
+    n
+){
 
     if(!n)
         return "0 B";
@@ -765,11 +919,13 @@ function bytes(n){
 }
 
 
-/* ==========================================
+/* =========================================
    확장자 제거
-========================================== */
+========================================= */
 
-function baseName(name){
+function removeExt(
+    name
+){
 
     return name.replace(
         /\.xnb$/i,
@@ -779,39 +935,39 @@ function baseName(name){
 }
 
 
-/* ==========================================
+/* =========================================
    NPC 변경
-========================================== */
+========================================= */
 
-function updateTarget(){
+function updateNPC(){
 
-    const n =
+    const npc =
         $("npc").value;
 
     $("target").textContent =
         "Content/Portraits/"
-        + n
+        + npc
         + ".xnb";
 
     $("path").textContent =
-        n;
+        npc;
 
     $("save").textContent =
         "새 "
-        + n
+        + npc
         + ".xnb 저장";
 
 }
 
 $("npc").addEventListener(
     "change",
-    updateTarget
+    updateNPC
 );
 
 
-/* ==========================================
-   파일 선택 버튼
-========================================== */
+/* =========================================
+   버튼
+========================================= */
 
 $("xnbBtn").onclick = () =>
     $("xnb").click();
@@ -820,195 +976,209 @@ $("pngBtn").onclick = () =>
     $("png").click();
 
 
-/* ==========================================
+/* =========================================
    XNB 선택
-========================================== */
+========================================= */
 
-$("xnb").onchange = async () => {
+$("xnb").addEventListener(
+    "change",
+    async function(){
 
-    const f =
-        $("xnb").files[0];
+        const file =
+            this.files[0];
 
-    if(!f)
-        return;
-
-    xnbFile = f;
-
-
-    $("xnbBox")
-        .classList
-        .remove("hidden");
-
-
-    $("xnbName").textContent =
-        f.name;
-
-
-    $("xnbInfo").textContent =
-        bytes(f.size)
-        + " · XNB";
-
-
-    try{
-
-        const data =
-            await XNB.unpackToContent(
-                f
-            );
-
-
-        if(
-            data.type !== "png"
-        ){
-
-            setStatus(
-                "원본 XNB의 콘텐츠가 PNG/Texture2D로 인식되지 않았습니다.",
-                "err"
-            );
-
+        if(!file)
             return;
 
-        }
+        xnbFile =
+            file;
+
+        $("xnbBox")
+            .classList
+            .remove("hidden");
+
+        $("xnbName").textContent =
+            file.name;
+
+        $("xnbInfo").textContent =
+            bytes(file.size)
+            + " · XNB";
 
 
-        setStatus(
-            "원본 XNB의 Texture2D를 정상적으로 읽었습니다. 새 PNG를 선택하세요.",
-            "ok"
-        );
-
-
-        step(2);
-
-        checkReady();
-
-    }
-    catch(e){
-
-        console.error(e);
-
-        setStatus(
-            "XNB 언팩 실패: "
-            + (
-                e?.message ||
-                e
-            ),
-            "err"
-        );
-
-    }
-
-};
-
-
-/* ==========================================
-   PNG 선택
-========================================== */
-
-$("png").onchange = () => {
-
-    const f =
-        $("png").files[0];
-
-    if(!f)
-        return;
-
-    pngFile = f;
-
-
-    $("pngBox")
-        .classList
-        .remove("hidden");
-
-
-    $("pngName").textContent =
-        f.name;
-
-
-    $("pngInfo").textContent =
-        bytes(f.size)
-        + " · PNG";
-
-
-    if(previewURL){
-
-        URL.revokeObjectURL(
-            previewURL
-        );
-
-    }
-
-
-    previewURL =
-        URL.createObjectURL(
-            f
-        );
-
-
-    $("preview").src =
-        previewURL;
-
-
-    $("preview").style.display =
-        "block";
-
-
-    $("previewCard")
-        .classList
-        .remove("hidden");
-
-
-    $("preview").onload = () => {
-
-        const w =
-            $("preview").naturalWidth;
-
-        const h =
-            $("preview").naturalHeight;
-
-
-        $("size").textContent =
-            w
-            + " × "
-            + h;
-
-
-        if(
-            w === 256 &&
-            h === 768
-        ){
+        try{
 
             setStatus(
-                "새 PNG가 256 × 768입니다. 변환할 준비가 되었습니다.",
-                "ok"
-            );
-
-        }
-        else{
-
-            setStatus(
-                "PNG 크기: "
-                + w
-                + " × "
-                + h
-                + " · 권장 크기는 256 × 768입니다.",
+                "XNB를 검사하는 중...",
                 "warn"
             );
 
+
+            const content =
+                await XNB.unpackToContent(
+                    file
+                );
+
+
+            if(
+                !content ||
+                content.type !== "png"
+            ){
+
+                throw new Error(
+                    "이 XNB에서 Texture2D PNG를 찾지 못했습니다."
+                );
+
+            }
+
+
+            setStatus(
+                "원본 XNB를 정상적으로 읽었습니다. 새 PNG를 선택하세요.",
+                "ok"
+            );
+
+
+            step(2);
+
+
+            checkReady();
+
+        }
+        catch(error){
+
+            console.error(
+                error
+            );
+
+            setStatus(
+                "XNB 읽기 실패: "
+                + (
+                    error.message ||
+                    error
+                ),
+                "err"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   PNG 선택
+========================================= */
+
+$("png").addEventListener(
+    "change",
+    function(){
+
+        const file =
+            this.files[0];
+
+        if(!file)
+            return;
+
+
+        pngFile =
+            file;
+
+
+        $("pngBox")
+            .classList
+            .remove("hidden");
+
+
+        $("pngName").textContent =
+            file.name;
+
+
+        $("pngInfo").textContent =
+            bytes(file.size)
+            + " · PNG";
+
+
+        if(previewURL){
+
+            URL.revokeObjectURL(
+                previewURL
+            );
+
         }
 
 
-        step(2);
-
-        checkReady();
-
-    };
-
-};
+        previewURL =
+            URL.createObjectURL(
+                file
+            );
 
 
-/* ==========================================
-   변환 버튼 활성화
-========================================== */
+        $("preview").src =
+            previewURL;
+
+
+        $("preview").style.display =
+            "block";
+
+
+        $("previewCard")
+            .classList
+            .remove("hidden");
+
+
+        $("preview").onload =
+            function(){
+
+                const width =
+                    this.naturalWidth;
+
+                const height =
+                    this.naturalHeight;
+
+
+                $("size").textContent =
+                    width
+                    + " × "
+                    + height;
+
+
+                if(
+                    width === 256 &&
+                    height === 768
+                ){
+
+                    setStatus(
+                        "PNG가 256 × 768입니다. 변환할 준비가 되었습니다.",
+                        "ok"
+                    );
+
+                }
+                else{
+
+                    setStatus(
+                        "PNG 크기: "
+                        + width
+                        + " × "
+                        + height
+                        + " · 권장 크기: 256 × 768",
+                        "warn"
+                    );
+
+                }
+
+
+                step(2);
+
+                checkReady();
+
+            };
+
+    }
+);
+
+
+/* =========================================
+   준비 확인
+========================================= */
 
 function checkReady(){
 
@@ -1021,489 +1191,885 @@ function checkReady(){
 }
 
 
-/* ==========================================
-   PNG → XNB
-========================================== */
+/* =========================================
+   Blob 변환
+========================================= */
 
-$("convert").onclick =
-async () => {
+async function toBlob(
+    value
+){
+
+    if(!value)
+        return null;
+
 
     if(
-        !xnbFile ||
-        !pngFile
-    )
-        return;
+        value instanceof Blob
+    ){
+
+        return value;
+
+    }
 
 
-    $("convert").disabled =
-        true;
+    if(
+        value instanceof ArrayBuffer
+    ){
+
+        return new Blob(
+            [value],
+            {
+                type:
+                    "application/octet-stream"
+            }
+        );
+
+    }
 
 
-    setStatus(
-        "원본 XNB를 언팩하는 중...",
-        "warn"
+    if(
+        value instanceof Uint8Array
+    ){
+
+        return new Blob(
+            [value],
+            {
+                type:
+                    "application/octet-stream"
+            }
+        );
+
+    }
+
+
+    if(
+        value?.data
+    ){
+
+        return toBlob(
+            value.data
+        );
+
+    }
+
+
+    if(
+        value?.buffer
+    ){
+
+        return toBlob(
+            value.buffer
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================
+   패킹 결과에서 XNB 찾기
+========================================= */
+
+async function extractPackResult(
+    result
+){
+
+    log(
+        "pack 결과 타입: "
+        + (
+            result?.constructor?.name ||
+            typeof result
+        )
     );
 
 
-    step(3);
+    /* ------------------------------
+       직접 Blob
+    ------------------------------ */
+
+    const direct =
+        await toBlob(
+            result
+        );
 
 
-    try{
+    if(direct){
 
-        /* ==============================
-           원본 XNB 언팩
-        ============================== */
+        return direct;
 
-        const original =
-            await XNB.unpackToFiles(
-                xnbFile,
-                {
-                    fileName:
-                        baseName(
-                            xnbFile.name
-                        ),
-
-                    contentOnly:false
-                }
-            );
+    }
 
 
-        if(
-            !original ||
-            !original.length
-        ){
+    /* ------------------------------
+       배열
+    ------------------------------ */
 
-            throw new Error(
-                "XNB에서 패킹용 파일을 추출하지 못했습니다."
-            );
+    if(
+        Array.isArray(result)
+    ){
 
-        }
-
-
-        /* ==============================
-           파일 구성
-        ============================== */
-
-        const files = [];
-
-        let replaced = false;
+        log(
+            "pack 결과 배열 길이: "
+            + result.length
+        );
 
 
         for(
-            const item of original
+            const item of result
         ){
 
-            const ext =
-                (
-                    item.extension ||
-                    ""
-                ).toLowerCase();
+            const blob =
+                await toBlob(
+                    item
+                );
 
 
-            /* ==========================
-               원본 PNG를 새 PNG로 교체
-            ========================== */
+            if(blob){
 
-            if(
-                ext === "png" &&
-                !replaced
-            ){
+                log(
+                    "배열 결과에서 바이너리 발견: "
+                    + bytes(blob.size)
+                );
 
-                files.push({
-
-                    name:
-                        baseName(
-                            xnbFile.name
-                        )
-                        + ".png",
-
-                    data:
-                        pngFile
-
-                });
-
-
-                replaced = true;
-
-            }
-
-
-            /* ==========================
-               나머지 파일 유지
-            ========================== */
-
-            else{
-
-                files.push({
-
-                    name:
-                        baseName(
-                            xnbFile.name
-                        )
-                        + "."
-                        + ext,
-
-                    data:
-                        item.data
-
-                });
+                return blob;
 
             }
 
         }
-
-
-        /* ==============================
-           PNG가 없는 경우
-        ============================== */
-
-        if(!replaced){
-
-            throw new Error(
-                "원본 XNB에서 Texture2D PNG를 찾지 못했습니다."
-            );
-
-        }
-
-
-        setStatus(
-            "새 PNG를 넣어 XNB를 패킹하는 중...",
-            "warn"
-        );
-
-
-        /* ==============================
-           XNB 패킹
-        ============================== */
-
-        const result =
-            await XNB.pack(
-                files,
-                {
-                    compression:
-                        "none",
-
-                    debug:
-                        true
-                }
-            );
-
-
-        /* ==============================
-           결과 처리
-        ============================== */
-
-        let data = null;
-
-
-        /* Blob */
-
-        if(
-            result instanceof Blob
-        ){
-
-            data = result;
-
-        }
-
-
-        /* ArrayBuffer */
-
-        else if(
-            result instanceof ArrayBuffer
-        ){
-
-            data =
-                new Blob(
-                    [result],
-                    {
-                        type:
-                            "application/octet-stream"
-                    }
-                );
-
-        }
-
-
-        /* Uint8Array */
-
-        else if(
-            result instanceof Uint8Array
-        ){
-
-            data =
-                new Blob(
-                    [result],
-                    {
-                        type:
-                            "application/octet-stream"
-                    }
-                );
-
-        }
-
-
-        /* Array */
-
-        else if(
-            Array.isArray(result)
-        ){
-
-            const hit =
-                result.find(
-                    x =>
-                        x?.data ||
-                        x instanceof Blob
-                );
-
-
-            if(hit){
-
-                data =
-                    hit.data instanceof Blob
-                    ? hit.data
-                    : new Blob(
-                        [hit.data],
-                        {
-                            type:
-                                "application/octet-stream"
-                        }
-                    );
-
-            }
-
-        }
-
-
-        /* Object */
-
-        else if(
-            result?.data
-        ){
-
-            data =
-                result.data instanceof Blob
-                ? result.data
-                : new Blob(
-                    [result.data],
-                    {
-                        type:
-                            "application/octet-stream"
-                    }
-                );
-
-        }
-
-
-        /* ==============================
-           결과 확인
-        ============================== */
-
-        if(!data){
-
-            throw new Error(
-                "패커가 XNB 바이너리를 반환하지 않았습니다."
-            );
-
-        }
-
-
-        outputBlob =
-            data;
-
-
-        /* ==============================
-           완료
-        ============================== */
-
-        setStatus(
-
-            "XNB 변환 완료. 생성 크기: "
-            + bytes(data.size)
-            + " · 비압축 XNB로 생성되었습니다.",
-
-            "ok"
-
-        );
-
-
-        $("save").disabled =
-            false;
-
-
-        step(4);
 
     }
-    catch(e){
-
-        console.error(e);
 
 
-        outputBlob =
-            null;
+    /* ------------------------------
+       객체 내부 검색
+    ------------------------------ */
+
+    if(
+        result &&
+        typeof result === "object"
+    ){
+
+        const keys =
+            Object.keys(
+                result
+            );
 
 
-        setStatus(
-
-            "XNB 변환 실패: "
-            + (
-                e?.message ||
-                e
-            ),
-
-            "err"
-
+        log(
+            "pack 결과 키: "
+            + keys.join(", ")
         );
+
+
+        const possibleKeys = [
+
+            "data",
+            "blob",
+            "file",
+            "buffer",
+            "output",
+            "result",
+            "xnb"
+
+        ];
+
+
+        for(
+            const key of possibleKeys
+        ){
+
+            if(
+                result[key]
+            ){
+
+                const blob =
+                    await toBlob(
+                        result[key]
+                    );
+
+
+                if(blob){
+
+                    return blob;
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================
+   PNG → XNB
+========================================= */
+
+$("convert").addEventListener(
+    "click",
+    async function(){
+
+        if(
+            !xnbFile ||
+            !pngFile
+        ){
+
+            return;
+
+        }
+
+
+        this.disabled =
+            true;
 
 
         $("save").disabled =
             true;
 
 
-        step(2);
+        outputBlob =
+            null;
+
+
+        clearLog();
+
+
+        step(3);
+
+
+        try{
+
+            /* ==========================
+               1. 원본 XNB 언팩
+            ========================== */
+
+            setStatus(
+                "원본 XNB를 분석하는 중...",
+                "warn"
+            );
+
+
+            log(
+                "원본: "
+                + xnbFile.name
+            );
+
+
+            const originalFiles =
+                await XNB.unpackToFiles(
+                    xnbFile,
+                    {
+                        fileName:
+                            removeExt(
+                                xnbFile.name
+                            ),
+
+                        contentOnly:
+                            false,
+
+                        yaml:
+                            false
+                    }
+                );
+
+
+            if(
+                !Array.isArray(
+                    originalFiles
+                )
+            ){
+
+                throw new Error(
+                    "XNB 언팩 결과가 배열이 아닙니다."
+                );
+
+            }
+
+
+            log(
+                "언팩 파일 수: "
+                + originalFiles.length
+            );
+
+
+            /* ==========================
+               2. PNG + JSON 확인
+            ========================== */
+
+            let pngFound =
+                false;
+
+            let jsonFound =
+                false;
+
+
+            for(
+                const item of originalFiles
+            ){
+
+                log(
+                    "추출 파일: "
+                    + (
+                        item.extension ||
+                        "unknown"
+                    )
+                    + " / "
+                    + bytes(
+                        item.data?.size ||
+                        item.data?.byteLength ||
+                        0
+                    )
+                );
+
+
+                if(
+                    (
+                        item.extension ||
+                        ""
+                    ).toLowerCase()
+                    === "png"
+                ){
+
+                    pngFound =
+                        true;
+
+                }
+
+
+                if(
+                    (
+                        item.extension ||
+                        ""
+                    ).toLowerCase()
+                    === "json"
+                ){
+
+                    jsonFound =
+                        true;
+
+                }
+
+            }
+
+
+            if(!pngFound){
+
+                throw new Error(
+                    "원본 XNB에서 PNG Texture2D를 찾지 못했습니다."
+                );
+
+            }
+
+
+            if(!jsonFound){
+
+                throw new Error(
+                    "원본 XNB의 JSON 헤더를 찾지 못했습니다."
+                );
+
+            }
+
+
+            /* ==========================
+               3. 패킹용 파일 생성
+            ========================== */
+
+            const base =
+                removeExt(
+                    xnbFile.name
+                );
+
+
+            const packFiles =
+                [];
+
+
+            let replaced =
+                false;
+
+
+            for(
+                const item of originalFiles
+            ){
+
+                const ext =
+                    (
+                        item.extension ||
+                        ""
+                    ).toLowerCase();
+
+
+                /* ----------------------
+                   PNG 교체
+                ---------------------- */
+
+                if(
+                    ext === "png"
+                ){
+
+                    packFiles.push({
+
+                        name:
+                            base
+                            + ".png",
+
+                        data:
+                            pngFile
+
+                    });
+
+
+                    replaced =
+                        true;
+
+                }
+
+
+                /* ----------------------
+                   JSON 유지
+                ---------------------- */
+
+                else if(
+                    ext === "json"
+                ){
+
+                    packFiles.push({
+
+                        name:
+                            base
+                            + ".json",
+
+                        data:
+                            item.data
+
+                    });
+
+                }
+
+
+                /* ----------------------
+                   기타 파일 유지
+                ---------------------- */
+
+                else{
+
+                    packFiles.push({
+
+                        name:
+                            base
+                            + "."
+                            + ext,
+
+                        data:
+                            item.data
+
+                    });
+
+                }
+
+            }
+
+
+            if(!replaced){
+
+                throw new Error(
+                    "새 PNG 교체에 실패했습니다."
+                );
+
+            }
+
+
+            log(
+                "패킹 파일:"
+            );
+
+
+            for(
+                const f of packFiles
+            ){
+
+                log(
+                    " - "
+                    + f.name
+                );
+
+            }
+
+
+            /* ==========================
+               4. XNB 패킹
+            ========================== */
+
+            setStatus(
+                "새 PNG를 넣어 XNB를 생성하는 중...",
+                "warn"
+            );
+
+
+            /*
+             * 중요:
+             *
+             * debug:true를 사용하지 않습니다.
+             *
+             * debug:true는 성공/실패 결과
+             * 구조를 별도로 반환합니다.
+             *
+             * 여기서는 실제 XNB 결과만 받습니다.
+             */
+
+
+            const packed =
+                await XNB.pack(
+                    packFiles,
+                    {
+                        compression:
+                            "none",
+
+                        debug:
+                            false
+                    }
+                );
+
+
+            log(
+                "패킹 완료"
+            );
+
+
+            /* ==========================
+               5. 반환값에서 Blob 추출
+            ========================== */
+
+            const blob =
+                await extractPackResult(
+                    packed
+                );
+
+
+            if(!blob){
+
+                throw new Error(
+                    "패커가 XNB 바이너리를 반환하지 않았습니다."
+                );
+
+            }
+
+
+            if(blob.size < 10){
+
+                throw new Error(
+                    "생성된 XNB 파일 크기가 비정상적으로 작습니다."
+                );
+
+            }
+
+
+            /* ==========================
+               6. XNB 헤더 검사
+            ========================== */
+
+            const buffer =
+                await blob.arrayBuffer();
+
+
+            const bytesView =
+                new Uint8Array(
+                    buffer
+                );
+
+
+            const magic =
+                String.fromCharCode(
+                    bytesView[0],
+                    bytesView[1],
+                    bytesView[2],
+                    bytesView[3]
+                );
+
+
+            log(
+                "생성 헤더: "
+                + magic
+            );
+
+
+            if(
+                magic !== "XNBw"
+            ){
+
+                throw new Error(
+                    "생성된 파일이 정상적인 XNBw 헤더가 아닙니다."
+                );
+
+            }
+
+
+            const version =
+                bytesView[4];
+
+
+            const flags =
+                bytesView[5];
+
+
+            log(
+                "XNB 버전: "
+                + version
+            );
+
+
+            log(
+                "XNB 플래그: "
+                + flags
+            );
+
+
+            /* ==========================
+               7. 최종 결과
+            ========================== */
+
+            outputBlob =
+                new Blob(
+                    [buffer],
+                    {
+                        type:
+                            "application/octet-stream"
+                    }
+                );
+
+
+            setStatus(
+
+                "XNB 변환 성공! "
+                + bytes(
+                    outputBlob.size
+                )
+                + " · XNB 헤더 정상",
+
+                "ok"
+
+            );
+
+
+            $("save").disabled =
+                false;
+
+
+            step(4);
+
+        }
+        catch(error){
+
+            console.error(
+                error
+            );
+
+
+            outputBlob =
+                null;
+
+
+            setStatus(
+
+                "XNB 변환 실패: "
+                + (
+                    error?.message ||
+                    error
+                ),
+
+                "err"
+
+            );
+
+
+            log(
+                "오류: "
+                + (
+                    error?.stack ||
+                    error
+                )
+            );
+
+
+            step(2);
+
+        }
+        finally{
+
+            this.disabled =
+                false;
+
+        }
 
     }
-    finally{
-
-        $("convert").disabled =
-            false;
-
-    }
-
-};
+);
 
 
-/* ==========================================
-   XNB 저장
-========================================== */
+/* =========================================
+   저장
+========================================= */
 
-$("save").onclick = () => {
+$("save").addEventListener(
+    "click",
+    function(){
 
-    if(!outputBlob)
-        return;
-
-
-    const name =
-        $("npc").value
-        + ".xnb";
+        if(!outputBlob)
+            return;
 
 
-    const url =
-        URL.createObjectURL(
-            outputBlob
+        const npc =
+            $("npc").value;
+
+
+        const fileName =
+            npc
+            + ".xnb";
+
+
+        const url =
+            URL.createObjectURL(
+                outputBlob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            fileName;
+
+
+        link.style.display =
+            "none";
+
+
+        document.body.appendChild(
+            link
         );
 
 
-    const a =
-        document.createElement(
-            "a"
+        link.click();
+
+
+        link.remove();
+
+
+        setTimeout(
+            function(){
+
+                URL.revokeObjectURL(
+                    url
+                );
+
+            },
+            1500
         );
 
 
-    a.href =
-        url;
+        setStatus(
+
+            fileName
+            + " 저장을 시작했습니다. 파일 앱에서 확인하세요.",
+
+            "ok"
+
+        );
+
+    }
+);
 
 
-    a.download =
-        name;
-
-
-    document.body.appendChild(
-        a
-    );
-
-
-    a.click();
-
-
-    a.remove();
-
-
-    setTimeout(
-        () =>
-            URL.revokeObjectURL(
-                url
-            ),
-        1000
-    );
-
-
-    setStatus(
-
-        name
-        + " 저장을 시작했습니다. 파일 앱에서 확인하세요.",
-
-        "ok"
-
-    );
-
-};
-
-
-/* ==========================================
+/* =========================================
    초기화
-========================================== */
+========================================= */
 
-$("reset").onclick = () => {
+$("reset").addEventListener(
+    "click",
+    function(){
 
-    xnbFile =
-        null;
+        xnbFile =
+            null;
 
-    pngFile =
-        null;
+        pngFile =
+            null;
 
-    outputBlob =
-        null;
-
-
-    $("xnb").value =
-        "";
-
-    $("png").value =
-        "";
+        outputBlob =
+            null;
 
 
-    $("xnbBox")
-        .classList
-        .add("hidden");
+        $("xnb").value =
+            "";
+
+        $("png").value =
+            "";
 
 
-    $("pngBox")
-        .classList
-        .add("hidden");
+        $("xnbBox")
+            .classList
+            .add("hidden");
 
 
-    $("previewCard")
-        .classList
-        .add("hidden");
+        $("pngBox")
+            .classList
+            .add("hidden");
 
 
-    $("preview").src =
-        "";
+        $("previewCard")
+            .classList
+            .add("hidden");
 
 
-    $("save").disabled =
-        true;
+        $("preview").src =
+            "";
 
 
-    setStatus(
-        "원본 XNB와 새 PNG를 선택해주세요."
-    );
+        $("preview").style.display =
+            "none";
 
 
-    step(1);
+        $("save").disabled =
+            true;
 
 
-    checkReady();
-
-};
+        clearLog();
 
 
-/* ==========================================
+        setStatus(
+            "원본 XNB와 새 PNG를 선택해주세요."
+        );
+
+
+        step(1);
+
+
+        checkReady();
+
+    }
+);
+
+
+/* =========================================
    초기 실행
-========================================== */
+========================================= */
 
-updateTarget();
+updateNPC();
+
+checkReady();
 
 </script>
 

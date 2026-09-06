@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-
 <meta charset="UTF-8">
 
 <meta
     name="viewport"
-    content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0"
+    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,viewport-fit=cover"
 >
 
-<title>Stardew Portrait Runtime</title>
+<meta name="format-detection" content="telephone=no">
+
+<title>펫 키우기</title>
 
 <style>
 
@@ -18,284 +19,1111 @@
     -webkit-tap-highlight-color:transparent;
     -webkit-user-select:none;
     user-select:none;
+    -webkit-touch-callout:none;
+    -webkit-user-drag:none;
+    user-drag:none;
 }
 
 html,
 body{
+    width:100%;
+    height:100%;
     margin:0;
     padding:0;
-    background:#101218;
-    color:#fff;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Apple SD Gothic Neo",
-        sans-serif;
+    overflow:hidden;
+    background:#17110f;
+    -webkit-text-size-adjust:100%;
+    touch-action:none;
+    overscroll-behavior:none;
 }
 
 body{
-    padding:18px 14px 40px;
-}
-
-.app{
-    max-width:520px;
-    margin:auto;
-}
-
-.header{
-    text-align:center;
-    padding:14px 8px 24px;
-}
-
-.logo{
-    font-size:58px;
-    line-height:1;
-}
-
-.title{
-    font-size:24px;
-    font-weight:800;
-    margin-top:10px;
-}
-
-.sub{
-    font-size:12px;
-    color:#9297a5;
-    margin-top:7px;
-}
-
-.card{
-    background:#1b1f28;
-    border:1px solid #2b303c;
-    border-radius:20px;
-    padding:18px;
-    margin-bottom:14px;
-}
-
-.ct{
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:13px;
-}
-
-.desc{
-    font-size:12px;
-    line-height:1.65;
-    color:#969ba8;
-}
-
-select{
-    width:100%;
-    height:52px;
-    border-radius:14px;
-    border:1px solid #393f4d;
-    background:#272c37;
-    color:#fff;
-    padding:0 14px;
-    font-size:15px;
-    outline:none;
-}
-
-button{
-    width:100%;
-    min-height:53px;
-    border:0;
-    border-radius:15px;
-    margin-top:10px;
-    font-size:15px;
-    font-weight:800;
-    color:#fff;
-    background:#5965ff;
-}
-
-button.secondary{
-    background:#292e39;
-}
-
-button.danger{
-    background:#713b43;
-}
-
-button:disabled{
-    opacity:.4;
-}
-
-.box{
-    margin-top:12px;
-    padding:13px;
-    border-radius:13px;
-    background:#14171e;
-    border:1px solid #2d323e;
-}
-
-.name{
-    font-size:13px;
-    font-weight:700;
-    word-break:break-all;
-}
-
-.info{
-    font-size:11px;
-    color:#858b99;
-    margin-top:5px;
-    line-height:1.5;
-}
-
-.preview{
     display:flex;
-    justify-content:center;
     align-items:center;
-    min-height:270px;
-    margin-top:12px;
-    padding:14px;
-    border-radius:15px;
+    justify-content:center;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Apple SD Gothic Neo",
+        "Noto Sans KR",
+        sans-serif;
+}
+
+#game{
+    position:relative;
+
+    width:min(100vw,100vh);
+    height:min(100vw,100vh);
+
+    max-width:620px;
+    max-height:620px;
+
     overflow:hidden;
 
-    background:
-        repeating-conic-gradient(
-            #222733 0 25%,
-            #181c24 0 50%
-        )
-        50%/24px 24px;
+    background:#5a4032;
+
+    border-radius:8%;
+
+    isolation:isolate;
+
+    touch-action:none;
+
+    -webkit-user-select:none;
+    user-select:none;
+
+    -webkit-touch-callout:none;
+
+    overscroll-behavior:none;
+
+    transform-origin:center center;
 }
 
-#preview{
-    width:256px;
-    max-width:100%;
+
+/* =========================================================
+   배경
+========================================================= */
+
+#background{
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    z-index:1;
+
+    pointer-events:none;
+
+    -webkit-user-drag:none;
+
+    transition:opacity .45s ease;
+}
+
+
+#nightOverlay{
+    position:absolute;
+
+    inset:0;
+
+    z-index:2;
+
+    pointer-events:none;
+
+    background:rgba(18,10,8,0);
+
+    transition:background .8s ease;
+}
+
+
+#game.night #nightOverlay{
+    background:rgba(25,13,12,.12);
+}
+
+
+/* =========================================================
+   소품
+========================================================= */
+
+#props{
+    position:absolute;
+
+    inset:0;
+
+    z-index:5;
+
+    pointer-events:none;
+}
+
+
+.prop{
+    position:absolute;
+
+    display:block;
+
+    object-fit:contain;
+
+    pointer-events:auto;
+
+    cursor:pointer;
+
+    -webkit-user-select:none;
+    user-select:none;
+
+    -webkit-touch-callout:none;
+
+    -webkit-user-drag:none;
+
+    touch-action:none;
+
+    transform-origin:center bottom;
+
+    transition:transform .12s ease;
+}
+
+
+#shelf{
+    width:39%;
+
+    left:2%;
+    top:24%;
+
+    z-index:7;
+}
+
+
+#booksStanding{
+    width:19%;
+
+    left:9%;
+    top:10%;
+
+    z-index:5;
+
+    transform-origin:50% 100%;
+}
+
+
+#booksHorizontal{
+    width:18%;
+
+    right:7%;
+    bottom:19%;
+
+    z-index:11;
+
+    transform-origin:50% 100%;
+}
+
+
+#plant{
+    width:23%;
+
+    left:3%;
+    bottom:19%;
+
+    z-index:8;
+
+    transform-origin:50% 100%;
+}
+
+
+#lamp{
+    width:22%;
+
+    right:3%;
+    top:4%;
+
+    z-index:7;
+
+    transform-origin:50% 7%;
+}
+
+
+#note{
+    width:15%;
+
+    right:15%;
+    top:27%;
+
+    z-index:8;
+
+    transform-origin:50% 5%;
+}
+
+
+/* =========================================================
+   둥지
+========================================================= */
+
+#nest{
+    position:absolute;
+
+    width:59%;
+
+    left:50%;
+
+    bottom:10.5%;
+
+    transform:translateX(-50%);
+
+    z-index:10;
+
+    pointer-events:auto;
+
+    cursor:pointer;
+
+    touch-action:none;
+
+    -webkit-user-select:none;
+    user-select:none;
+
+    -webkit-touch-callout:none;
+
+    -webkit-user-drag:none;
+
+    transform-origin:center bottom;
+}
+
+
+/* =========================================================
+   펫
+========================================================= */
+
+#owlArea{
+    position:absolute;
+
+    left:50%;
+
+    bottom:19%;
+
+    width:37%;
+    height:37%;
+
+    transform:translateX(-50%);
+
+    z-index:20;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-end;
+
+    pointer-events:auto;
+
+    cursor:pointer;
+
+    touch-action:none;
+
+    -webkit-user-select:none;
+    user-select:none;
+
+    -webkit-touch-callout:none;
+
+    -webkit-user-drag:none;
+
+    overscroll-behavior:none;
+}
+
+
+#owl{
+    display:block;
+
+    width:auto;
     height:auto;
-    image-rendering:pixelated;
-    display:none;
+
+    max-width:100%;
+    max-height:100%;
+
+    object-fit:contain;
+
+    pointer-events:none;
+
+    -webkit-user-drag:none;
+
+    user-select:none;
+    -webkit-user-select:none;
+
+    filter:
+        drop-shadow(
+            0 3px 0
+            rgba(55,34,25,.20)
+        );
+
+    transform-origin:center bottom;
+
+    transition:
+        transform .18s ease,
+        opacity .15s ease;
 }
 
-.status{
-    padding:14px;
-    border-radius:14px;
-    background:#151820;
-    border:1px solid #292e39;
-    color:#aeb3bf;
-    font-size:12px;
-    line-height:1.65;
+
+/* =========================================================
+   꾹 누르기
+========================================================= */
+
+#owlArea.long-press #owl{
+
+    transform:
+        translateY(-26px)
+        scale(1.04);
+
 }
 
-.status.ok{
-    color:#9ee6ad;
-    border-color:#315f3b;
+
+/* =========================================================
+   잠
+========================================================= */
+
+#owlArea.sleeping #owl{
+
+    transform:
+        translateY(4px)
+        scale(.98);
+
 }
 
-.status.err{
-    color:#ff9c9c;
-    border-color:#653838;
+
+/* =========================================================
+   점프
+========================================================= */
+
+.owl-jump{
+
+    animation:
+        owlJump
+        .34s
+        ease-out;
+
 }
 
-.status.warn{
-    color:#ffd68a;
-    border-color:#66512d;
+
+@keyframes owlJump{
+
+    0%{
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+    45%{
+        transform:
+            translateY(-12px)
+            scale(1.04);
+    }
+
+    100%{
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:9px;
-    margin-top:12px;
+
+/* =========================================================
+   흔들기
+========================================================= */
+
+.owl-wiggle{
+
+    animation:
+        owlWiggle
+        .42s
+        ease-in-out;
+
 }
 
-.spec{
-    padding:12px;
-    background:#151820;
-    border-radius:12px;
+
+@keyframes owlWiggle{
+
+    0%{
+        transform:rotate(0);
+    }
+
+    20%{
+        transform:rotate(-5deg);
+    }
+
+    40%{
+        transform:rotate(5deg);
+    }
+
+    60%{
+        transform:rotate(-3deg);
+    }
+
+    80%{
+        transform:rotate(2deg);
+    }
+
+    100%{
+        transform:rotate(0);
+    }
+
 }
 
-.sl{
-    font-size:10px;
-    color:#7f8592;
+
+/* =========================================================
+   소품 흔들기
+========================================================= */
+
+.shake{
+
+    animation:
+        propShake
+        .45s
+        ease-in-out;
+
 }
 
-.sv{
-    font-size:13px;
-    font-weight:700;
-    margin-top:4px;
+
+@keyframes propShake{
+
+    0%{
+        transform:
+            rotate(0)
+            translateX(0);
+    }
+
+    20%{
+        transform:
+            rotate(-4deg)
+            translateX(-2px);
+    }
+
+    40%{
+        transform:
+            rotate(4deg)
+            translateX(2px);
+    }
+
+    60%{
+        transform:
+            rotate(-3deg)
+            translateX(-1px);
+    }
+
+    80%{
+        transform:
+            rotate(2deg)
+            translateX(1px);
+    }
+
+    100%{
+        transform:
+            rotate(0)
+            translateX(0);
+    }
+
 }
 
-.path{
-    font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        monospace;
 
-    font-size:11px;
-    line-height:1.6;
-    word-break:break-all;
+/* =========================================================
+   둥지 흔들기
+========================================================= */
 
-    background:#14171e;
-    border:1px solid #2d323e;
+.nest-shake{
 
-    padding:12px;
-    border-radius:12px;
+    animation:
+        nestShake
+        .45s
+        ease-in-out;
 
-    color:#b8bdc8;
 }
 
-.hidden{
-    display:none!important;
+
+@keyframes nestShake{
+
+    0%{
+        transform:
+            translateX(-50%)
+            rotate(0);
+    }
+
+    25%{
+        transform:
+            translateX(-50%)
+            rotate(-3deg);
+    }
+
+    50%{
+        transform:
+            translateX(-50%)
+            rotate(3deg);
+    }
+
+    75%{
+        transform:
+            translateX(-50%)
+            rotate(-2deg);
+    }
+
+    100%{
+        transform:
+            translateX(-50%)
+            rotate(0);
+    }
+
 }
 
-.footer{
+
+/* =========================================================
+   말풍선
+========================================================= */
+
+#bubble{
+
+    position:absolute;
+
+    left:50%;
+    bottom:54%;
+
+    min-width:68px;
+    max-width:180px;
+
+    padding:9px 14px;
+
+    transform:
+        translateX(-50%)
+        translateY(6px)
+        scale(.8);
+
+    opacity:0;
+
+    z-index:50;
+
+    background:#fff6e3;
+
+    border:3px solid #593a2b;
+
+    border-radius:18px;
+
+    color:#3d281f;
+
+    font-size:
+        clamp(17px,4vw,25px);
+
+    font-weight:900;
+
+    line-height:1;
+
     text-align:center;
-    color:#656b78;
-    font-size:10px;
-    line-height:1.6;
-    padding:4px 18px;
+
+    white-space:nowrap;
+
+    box-shadow:
+        0 3px 0
+        rgba(70,42,30,.20);
+
+    pointer-events:none;
+
+    transition:
+        opacity .15s ease,
+        transform .15s ease;
+
 }
 
-.step{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    margin:8px 0;
+
+#bubble.show{
+
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0)
+        scale(1);
+
 }
 
-.num{
-    width:28px;
-    height:28px;
-    flex:0 0 28px;
 
-    border-radius:50%;
+#bubble::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    bottom:-10px;
+
+    width:15px;
+    height:15px;
+
+    background:#fff6e3;
+
+    border-right:3px solid #593a2b;
+    border-bottom:3px solid #593a2b;
+
+    transform:
+        translateX(-50%)
+        rotate(45deg);
+
+}
+
+
+/* =========================================================
+   효과
+========================================================= */
+
+#effects{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:45;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+}
+
+
+.effect{
+
+    position:absolute;
+
+    width:11%;
+
+    height:auto;
+
+    object-fit:contain;
+
+    animation:
+        effectPop
+        .85s
+        ease-out
+        forwards;
+
+}
+
+
+@keyframes effectPop{
+
+    0%{
+        opacity:0;
+
+        transform:
+            scale(.3)
+            translateY(15px);
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+
+        transform:
+            scale(1.15)
+            translateY(-35px);
+    }
+
+}
+
+
+/* =========================================================
+   버튼
+========================================================= */
+
+#buttons{
+
+    position:absolute;
+
+    left:4.2%;
+    right:4.2%;
+
+    bottom:2.5%;
+
+    height:18%;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:2.5%;
+
+    z-index:60;
+
+    touch-action:none;
+
+}
+
+
+.action{
+
+    border:0;
+
+    padding:0;
+    margin:0;
+
+    background:transparent;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    background:#303541;
-    color:#aaa;
+    cursor:pointer;
 
-    font-size:12px;
-    font-weight:800;
+    touch-action:none;
+
+    -webkit-user-select:none;
+    user-select:none;
+
+    -webkit-touch-callout:none;
+
+    -webkit-user-drag:none;
+
 }
 
-.step.active .num{
-    background:#5965ff;
-    color:#fff;
+
+.action img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+
+    pointer-events:none;
+
+    -webkit-user-drag:none;
+
+    user-select:none;
+    -webkit-user-select:none;
+
+    filter:
+        drop-shadow(
+            0 2px 0
+            rgba(65,39,28,.20)
+        );
+
+    transition:
+        transform .1s ease;
+
 }
 
-.step.done .num{
-    background:#3e9653;
-    color:#fff;
+
+.action:active img{
+
+    transform:
+        scale(.92);
+
 }
 
-.stepText{
-    font-size:12px;
-    color:#9ca1ad;
+
+/* =========================================================
+   다시시작
+========================================================= */
+
+#restartButton{
+
+    position:absolute;
+
+    left:2.8%;
+    top:2.8%;
+
+    z-index:80;
+
+    border:2px solid #5b3b2b;
+
+    border-radius:9px;
+
+    padding:5px 8px;
+
+    background:rgba(255,244,223,.92);
+
+    color:#4c3023;
+
+    font-size:
+        clamp(10px,2.3vw,14px);
+
+    font-weight:900;
+
+    line-height:1;
+
+    box-shadow:
+        0 2px 0
+        rgba(65,40,28,.25);
+
+    cursor:pointer;
+
+    touch-action:none;
+
 }
 
-.step.active .stepText,
-.step.done .stepText{
-    color:#fff;
+
+/* =========================================================
+   시작 화면
+========================================================= */
+
+#startScreen{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:100;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        rgba(38,24,18,.22);
+
 }
 
-input[type="file"]{
+
+#startScreen.hidden{
+
     display:none;
+
+}
+
+
+#startCard{
+
+    width:70%;
+
+    padding:22px 18px;
+
+    background:#fff4df;
+
+    border:4px solid #5b3b2b;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    box-shadow:
+        0 5px 0
+        rgba(65,40,28,.25);
+
+}
+
+
+#startEgg{
+
+    display:block;
+
+    width:42%;
+
+    max-width:150px;
+
+    margin:
+        0 auto 9px;
+
+}
+
+
+#startTitle{
+
+    color:#4c3023;
+
+    font-size:
+        clamp(22px,5vw,34px);
+
+    font-weight:900;
+
+    margin-bottom:5px;
+
+}
+
+
+#startSub{
+
+    color:#4c3023;
+
+    opacity:.7;
+
+    font-size:
+        clamp(12px,2.8vw,17px);
+
+    font-weight:700;
+
+    margin-bottom:17px;
+
+}
+
+
+#startButton{
+
+    border:3px solid #5b3b2b;
+
+    border-radius:15px;
+
+    padding:10px 24px;
+
+    background:#e7c28f;
+
+    color:#4c3023;
+
+    font-size:
+        clamp(15px,3.5vw,20px);
+
+    font-weight:900;
+
+    box-shadow:
+        0 3px 0
+        #8b6247;
+
+    cursor:pointer;
+
+    touch-action:none;
+
+}
+
+
+/* =========================================================
+   다시시작 확인 팝업
+========================================================= */
+
+#confirmOverlay{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:200;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        rgba(30,18,13,.42);
+
+}
+
+
+#confirmOverlay.show{
+
+    display:flex;
+
+}
+
+
+#confirmCard{
+
+    width:76%;
+
+    max-width:390px;
+
+    padding:22px 18px 18px;
+
+    background:#fff4df;
+
+    border:4px solid #5b3b2b;
+
+    border-radius:22px;
+
+    text-align:center;
+
+    box-shadow:
+        0 5px 0
+        rgba(65,40,28,.28);
+
+}
+
+
+#confirmTitle{
+
+    color:#4c3023;
+
+    font-size:
+        clamp(19px,4.5vw,28px);
+
+    font-weight:900;
+
+    margin-bottom:9px;
+
+}
+
+
+#confirmText{
+
+    color:#4c3023;
+
+    font-size:
+        clamp(12px,3vw,16px);
+
+    font-weight:700;
+
+    line-height:1.5;
+
+    margin-bottom:18px;
+
+}
+
+
+#confirmButtons{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+
+}
+
+
+.confirmButton{
+
+    border:3px solid #5b3b2b;
+
+    border-radius:13px;
+
+    padding:10px 5px;
+
+    font-size:
+        clamp(13px,3.2vw,18px);
+
+    font-weight:900;
+
+    color:#4c3023;
+
+    cursor:pointer;
+
+    touch-action:none;
+
+}
+
+
+#cancelRestart{
+
+    background:#eee0cb;
+
+    box-shadow:
+        0 2px 0
+        #a28a70;
+
+}
+
+
+#confirmRestart{
+
+    background:#e7c28f;
+
+    box-shadow:
+        0 2px 0
+        #8b6247;
+
+}
+
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media(max-width:430px){
+
+    #game{
+
+        width:100vw;
+        height:100vw;
+
+        max-width:none;
+        max-height:none;
+
+        border-radius:0;
+
+    }
+
 }
 
 </style>
@@ -304,1278 +1132,3509 @@ input[type="file"]{
 
 <body>
 
-<div class="app">
-
-<!-- ==================================================
-     HEADER
-================================================== -->
-
-<div class="header">
-
-    <div class="logo">
-        🥔
-    </div>
-
-    <div class="title">
-        Stardew Portrait Runtime
-    </div>
-
-    <div class="sub">
-        커스텀 NPC 초상화 관리자
-    </div>
-
-</div>
+<div id="game">
 
 
-<!-- ==================================================
-     진행 단계
-================================================== -->
+    <!-- =====================================================
+         배경
+    ====================================================== -->
 
-<div class="card">
-
-    <div class="ct">
-        작업 순서
-    </div>
-
-    <div
-        id="step1"
-        class="step active"
+    <img
+        id="background"
+        src="bg_day.png"
+        alt=""
+        draggable="false"
     >
 
-        <div class="num">
-            1
-        </div>
+    <div id="nightOverlay"></div>
 
-        <div class="stepText">
-            NPC 선택
-        </div>
 
-    </div>
+    <!-- =====================================================
+         소품
+    ====================================================== -->
 
-
-    <div
-        id="step2"
-        class="step"
-    >
-
-        <div class="num">
-            2
-        </div>
-
-        <div class="stepText">
-            PNG 선택
-        </div>
-
-    </div>
-
-
-    <div
-        id="step3"
-        class="step"
-    >
-
-        <div class="num">
-            3
-        </div>
-
-        <div class="stepText">
-            적용 설정 생성
-        </div>
-
-    </div>
-
-
-    <div
-        id="step4"
-        class="step"
-    >
-
-        <div class="num">
-            4
-        </div>
-
-        <div class="stepText">
-            파일 저장
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ==================================================
-     NPC 선택
-================================================== -->
-
-<div class="card">
-
-    <div class="ct">
-        ① NPC 선택
-    </div>
-
-    <select id="npc">
-
-        <option value="Harvey">
-            Harvey
-        </option>
-
-        <option value="Abigail">
-            Abigail
-        </option>
-
-        <option value="Alex">
-            Alex
-        </option>
-
-        <option value="Elliott">
-            Elliott
-        </option>
-
-        <option value="Emily">
-            Emily
-        </option>
-
-        <option value="Haley">
-            Haley
-        </option>
-
-        <option value="Leah">
-            Leah
-        </option>
-
-        <option value="Maru">
-            Maru
-        </option>
-
-        <option value="Penny">
-            Penny
-        </option>
-
-        <option value="Sam">
-            Sam
-        </option>
-
-        <option value="Sebastian">
-            Sebastian
-        </option>
-
-        <option value="Shane">
-            Shane
-        </option>
-
-        <option value="Caroline">
-            Caroline
-        </option>
-
-        <option value="Clint">
-            Clint
-        </option>
-
-        <option value="Demetrius">
-            Demetrius
-        </option>
-
-        <option value="Dwarf">
-            Dwarf
-        </option>
-
-        <option value="Evelyn">
-            Evelyn
-        </option>
-
-        <option value="George">
-            George
-        </option>
-
-        <option value="Gus">
-            Gus
-        </option>
-
-        <option value="Jas">
-            Jas
-        </option>
-
-        <option value="Jodi">
-            Jodi
-        </option>
-
-        <option value="Kent">
-            Kent
-        </option>
-
-        <option value="Krobus">
-            Krobus
-        </option>
-
-        <option value="Lewis">
-            Lewis
-        </option>
-
-        <option value="Linus">
-            Linus
-        </option>
-
-        <option value="Marnie">
-            Marnie
-        </option>
-
-        <option value="Pam">
-            Pam
-        </option>
-
-        <option value="Pierre">
-            Pierre
-        </option>
-
-        <option value="Robin">
-            Robin
-        </option>
-
-        <option value="Sandy">
-            Sandy
-        </option>
-
-        <option value="Vincent">
-            Vincent
-        </option>
-
-        <option value="Willy">
-            Willy
-        </option>
-
-        <option value="Wizard">
-            Wizard
-        </option>
-
-    </select>
-
-
-    <div class="box">
-
-        <div
-            id="target"
-            class="name"
-        >
-            Portraits/Harvey
-        </div>
-
-        <div class="info">
-            게임에서 교체 대상으로 사용할 asset
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ==================================================
-     PNG 선택
-================================================== -->
-
-<div class="card">
-
-    <div class="ct">
-        ② 커스텀 PNG
-    </div>
-
-    <div class="desc">
-
-        기존 스타듀밸리 초상화 시트와 같은
-        256 × 768 PNG를 권장합니다.
-
-        <br><br>
-
-        64 × 64 초상화가
-        가로 4칸 × 세로 12칸으로 들어가는 구조입니다.
-
-    </div>
-
-
-    <input
-        id="pngInput"
-        type="file"
-        accept="image/png"
-    >
-
-
-    <button id="selectPNG">
-        PNG 선택
-    </button>
-
-
-    <div
-        id="fileBox"
-        class="box hidden"
-    >
-
-        <div
-            id="fileName"
-            class="name"
-        ></div>
-
-        <div
-            id="fileInfo"
-            class="info"
-        ></div>
-
-    </div>
-
-</div>
-
-
-<!-- ==================================================
-     PREVIEW
-================================================== -->
-
-<div
-    id="previewCard"
-    class="card hidden"
->
-
-    <div class="ct">
-        초상화 미리보기
-    </div>
-
-
-    <div class="preview">
+    <div id="props">
 
         <img
-            id="preview"
-            alt="PNG Preview"
+            id="shelf"
+            class="prop"
+            src="shelf.png"
+            alt=""
+            draggable="false"
+        >
+
+        <img
+            id="booksStanding"
+            class="prop"
+            src="books_standing.png"
+            alt=""
+            draggable="false"
+        >
+
+        <img
+            id="plant"
+            class="prop"
+            src="plant.png"
+            alt=""
+            draggable="false"
+        >
+
+        <img
+            id="lamp"
+            class="prop"
+            src="lamp.png"
+            alt=""
+            draggable="false"
+        >
+
+        <img
+            id="note"
+            class="prop"
+            src="note.png"
+            alt=""
+            draggable="false"
+        >
+
+        <img
+            id="booksHorizontal"
+            class="prop"
+            src="books_horizontal.png"
+            alt=""
+            draggable="false"
         >
 
     </div>
 
 
-    <div class="grid">
+    <!-- =====================================================
+         둥지
+    ====================================================== -->
 
-        <div class="spec">
+    <img
+        id="nest"
+        src="nest.png"
+        alt=""
+        draggable="false"
+    >
 
-            <div class="sl">
-                이미지 크기
-            </div>
 
-            <div
-                id="imageSize"
-                class="sv"
+    <!-- =====================================================
+         펫
+    ====================================================== -->
+
+    <div id="owlArea">
+
+        <img
+            id="owl"
+            src="owl_egg.png"
+            alt=""
+            draggable="false"
+        >
+
+    </div>
+
+
+    <div id="bubble"></div>
+
+    <div id="effects"></div>
+
+
+    <!-- =====================================================
+         버튼
+    ====================================================== -->
+
+    <div id="buttons">
+
+        <button
+            class="action"
+            id="feedButton"
+            type="button"
+            aria-label="먹이"
+        >
+
+            <img
+                src="button_feed.png"
+                alt=""
+                draggable="false"
             >
-                -
+
+        </button>
+
+
+        <button
+            class="action"
+            id="playButton"
+            type="button"
+            aria-label="놀기"
+        >
+
+            <img
+                src="button_play.png"
+                alt=""
+                draggable="false"
+            >
+
+        </button>
+
+
+        <button
+            class="action"
+            id="petButton"
+            type="button"
+            aria-label="쓰다듬기"
+        >
+
+            <img
+                src="button_pet.png"
+                alt=""
+                draggable="false"
+            >
+
+        </button>
+
+
+        <button
+            class="action"
+            id="talkButton"
+            type="button"
+            aria-label="말걸기"
+        >
+
+            <img
+                src="button_talk.png"
+                alt=""
+                draggable="false"
+            >
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         다시시작
+    ====================================================== -->
+
+    <button
+        id="restartButton"
+        type="button"
+    >
+        다시시작
+    </button>
+
+
+    <!-- =====================================================
+         시작 화면
+    ====================================================== -->
+
+    <div id="startScreen">
+
+        <div id="startCard">
+
+            <img
+                id="startEgg"
+                src="owl_egg.png"
+                alt=""
+                draggable="false"
+            >
+
+            <div id="startTitle">
+                펫 키우기
+            </div>
+
+            <div id="startSub">
+                어떤 펫이 태어날까요?
+            </div>
+
+            <button
+                id="startButton"
+                type="button"
+            >
+                시작
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         다시시작 확인
+    ====================================================== -->
+
+    <div id="confirmOverlay">
+
+        <div id="confirmCard">
+
+            <div id="confirmTitle">
+                정말 다시 시작할까요?
+            </div>
+
+            <div id="confirmText">
+                지금 키우고 있는 펫의 기록이 사라지고<br>
+                새로운 펫이 랜덤으로 태어나요.
+            </div>
+
+            <div id="confirmButtons">
+
+                <button
+                    id="cancelRestart"
+                    class="confirmButton"
+                    type="button"
+                >
+                    취소
+                </button>
+
+                <button
+                    id="confirmRestart"
+                    class="confirmButton"
+                    type="button"
+                >
+                    다시 시작
+                </button>
+
             </div>
 
         </div>
 
-
-        <div class="spec">
-
-            <div class="sl">
-                권장 구조
-            </div>
-
-            <div class="sv">
-                4 × 12
-            </div>
-
-        </div>
-
     </div>
 
 </div>
 
-
-<!-- ==================================================
-     설정 생성
-================================================== -->
-
-<div class="card">
-
-    <div class="ct">
-        ③ 런타임 적용 설정
-    </div>
-
-
-    <div
-        id="status"
-        class="status"
-    >
-        NPC와 PNG를 선택하세요.
-    </div>
-
-
-    <div
-        id="assetPath"
-        class="path"
-        style="margin-top:10px"
-    >
-        Portraits/Harvey
-    </div>
-
-
-    <button
-        id="createConfig"
-        disabled
-    >
-        적용 설정 만들기
-    </button>
-
-</div>
-
-
-<!-- ==================================================
-     결과
-================================================== -->
-
-<div
-    id="resultCard"
-    class="card hidden"
->
-
-    <div class="ct">
-        ④ 생성 결과
-    </div>
-
-
-    <div
-        id="resultStatus"
-        class="status ok"
-    >
-        설정이 생성되었습니다.
-    </div>
-
-
-    <button
-        id="saveConfig"
-    >
-        portraits.json 저장
-    </button>
-
-
-    <button
-        id="savePNG"
-        class="secondary"
-    >
-        PNG 저장
-    </button>
-
-
-    <button
-        id="reset"
-        class="secondary"
-    >
-        처음부터 다시
-    </button>
-
-</div>
-
-
-<!-- ==================================================
-     현재 구조
-================================================== -->
-
-<div class="card">
-
-    <div class="ct">
-        런타임 로더 구조
-    </div>
-
-
-    <div class="desc">
-
-        게임 asset:
-
-        <br>
-
-        <b id="assetText">
-            Portraits/Harvey
-        </b>
-
-        <br><br>
-
-        ↓
-
-        <br><br>
-
-        커스텀 이미지:
-
-        <br>
-
-        <b id="imageText">
-            portraits/Harvey.png
-        </b>
-
-        <br><br>
-
-        ↓
-
-        <br><br>
-
-        런타임에서 원본 초상화 대신
-        커스텀 Texture2D를 반환하는 구조입니다.
-
-    </div>
-
-</div>
-
-
-<!-- ==================================================
-     안내
-================================================== -->
-
-<div class="card">
-
-    <div class="ct">
-        파일 구조
-    </div>
-
-
-    <div class="path">
-
-PortraitRuntimeLoader/<br>
-├── portraits.json<br>
-└── portraits/<br>
-&nbsp;&nbsp;&nbsp;&nbsp;└── Harvey.png
-
-    </div>
-
-</div>
-
-
-<div class="footer">
-
-    Stardew Portrait Runtime
-
-    <br>
-
-    Custom portrait configuration tool
-
-</div>
-
-
-</div>
-
-
-<!-- ==================================================
-     SCRIPT
-================================================== -->
 
 <script>
 
-"use strict";
+
+/* =========================================================
+   기본 요소
+========================================================= */
+
+const game =
+    document.getElementById("game");
+
+const background =
+    document.getElementById("background");
+
+const owlArea =
+    document.getElementById("owlArea");
+
+const owl =
+    document.getElementById("owl");
+
+const nest =
+    document.getElementById("nest");
+
+const bubble =
+    document.getElementById("bubble");
+
+const effects =
+    document.getElementById("effects");
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const startButton =
+    document.getElementById("startButton");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const confirmOverlay =
+    document.getElementById("confirmOverlay");
+
+const cancelRestart =
+    document.getElementById("cancelRestart");
+
+const confirmRestart =
+    document.getElementById("confirmRestart");
+
+const startEgg =
+    document.getElementById("startEgg");
+
+const shelf =
+    document.getElementById("shelf");
+
+const booksStanding =
+    document.getElementById("booksStanding");
+
+const booksHorizontal =
+    document.getElementById("booksHorizontal");
+
+const plant =
+    document.getElementById("plant");
+
+const lamp =
+    document.getElementById("lamp");
+
+const note =
+    document.getElementById("note");
 
 
-/* ==================================================
-   변수
-================================================== */
+/* =========================================================
+   펫 목록
+========================================================= */
 
-let selectedPNG = null;
+const PETS = [
 
-let previewURL = null;
+    "capybara",
 
-let configData = null;
+    "cat",
 
+    "puppy",
 
-/* ==================================================
-   DOM
-================================================== */
+    "owl",
 
-const npc =
-    document.getElementById(
-        "npc"
-    );
+    "hamster",
 
-const pngInput =
-    document.getElementById(
-        "pngInput"
-    );
+    "rabbit"
 
-const selectPNG =
-    document.getElementById(
-        "selectPNG"
-    );
-
-const preview =
-    document.getElementById(
-        "preview"
-    );
-
-const previewCard =
-    document.getElementById(
-        "previewCard"
-    );
-
-const fileBox =
-    document.getElementById(
-        "fileBox"
-    );
-
-const fileName =
-    document.getElementById(
-        "fileName"
-    );
-
-const fileInfo =
-    document.getElementById(
-        "fileInfo"
-    );
-
-const imageSize =
-    document.getElementById(
-        "imageSize"
-    );
-
-const status =
-    document.getElementById(
-        "status"
-    );
-
-const createConfig =
-    document.getElementById(
-        "createConfig"
-    );
-
-const resultCard =
-    document.getElementById(
-        "resultCard"
-    );
-
-const assetPath =
-    document.getElementById(
-        "assetPath"
-    );
-
-const target =
-    document.getElementById(
-        "target"
-    );
-
-const assetText =
-    document.getElementById(
-        "assetText"
-    );
-
-const imageText =
-    document.getElementById(
-        "imageText"
-    );
-
-const saveConfig =
-    document.getElementById(
-        "saveConfig"
-    );
-
-const savePNG =
-    document.getElementById(
-        "savePNG"
-    );
-
-const reset =
-    document.getElementById(
-        "reset"
-    );
+];
 
 
-/* ==================================================
-   サイズ表示
-================================================== */
+/* =========================================================
+   저장
+========================================================= */
 
-function formatBytes(
-    bytes
-){
+const STORAGE_KEY =
+    "pet_game_state_v2";
 
-    if(
-        bytes < 1024
-    ){
 
-        return bytes
-        + " B";
+const defaultState = {
+
+    started:false,
+
+    pet:null,
+
+    growth:0,
+
+    stage:"egg",
+
+    hunger:70,
+
+    mood:70,
+
+    lastUpdate:Date.now()
+
+};
+
+
+let state =
+    loadState();
+
+
+function loadState(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+
+        if(!saved){
+
+            return {
+                ...defaultState
+            };
+
+        }
+
+
+        return {
+
+            ...defaultState,
+
+            ...JSON.parse(saved)
+
+        };
+
+    }catch(error){
+
+        return {
+            ...defaultState
+        };
 
     }
 
+}
 
-    if(
-        bytes < 1024 * 1024
-    ){
 
-        return (
-            bytes / 1024
-        ).toFixed(2)
-        + " KB";
+function saveState(){
+
+    state.lastUpdate =
+        Date.now();
+
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(state)
+    );
+
+}
+
+
+/* =========================================================
+   랜덤 펫
+========================================================= */
+
+function randomPet(){
+
+    return PETS[
+        Math.floor(
+            Math.random() *
+            PETS.length
+        )
+    ];
+
+}
+
+
+/* =========================================================
+   펫 이미지
+========================================================= */
+
+function petImage(type){
+
+    if(!state.pet){
+
+        return "owl_egg.png";
 
     }
 
 
     return (
-        bytes /
-        1024 /
-        1024
-    ).toFixed(2)
-    + " MB";
+        state.pet +
+        "_" +
+        type +
+        ".png"
+    );
 
 }
 
 
-/* ==================================================
-   상태
-================================================== */
+function setPetImage(type){
 
-function setStatus(
-    text,
-    type
-){
+    const src =
+        petImage(type);
 
-    status.textContent =
-        text;
 
-    status.className =
-        "status";
+    owl.src =
+        src;
 
-    if(type){
 
-        status.classList.add(
-            type
-        );
+    owl.onerror =
+        function(){
 
-    }
+            owl.onerror =
+                null;
 
-}
 
+            /*
+                상태 이미지가 없으면
+                해당 펫의 기본 이미지
+            */
 
-/* ==================================================
-   단계
-================================================== */
-
-function setStep(
-    number
-){
-
-    for(
-        let i = 1;
-        i <= 4;
-        i++
-    ){
-
-        const el =
-            document.getElementById(
-                "step" + i
-            );
-
-        el.classList.remove(
-            "active",
-            "done"
-        );
-
-
-        if(
-            i < number
-        ){
-
-            el.classList.add(
-                "done"
-            );
-
-        }
-
-
-        if(
-            i === number
-        ){
-
-            el.classList.add(
-                "active"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* ==================================================
-   NPC 변경
-================================================== */
-
-function updateNPC(){
-
-    const name =
-        npc.value;
-
-
-    const asset =
-        "Portraits/"
-        + name;
-
-
-    const image =
-        "portraits/"
-        + name
-        + ".png";
-
-
-    target.textContent =
-        asset;
-
-
-    assetPath.textContent =
-        asset;
-
-
-    assetText.textContent =
-        asset;
-
-
-    imageText.textContent =
-        image;
-
-
-    if(
-        selectedPNG
-    ){
-
-        createConfig.disabled =
-            false;
-
-    }
-
-}
-
-
-npc.addEventListener(
-    "change",
-    function(){
-
-        updateNPC();
-
-        resultCard
-            .classList
-            .add(
-                "hidden"
-            );
-
-    }
-);
-
-
-/* ==================================================
-   PNG 선택
-================================================== */
-
-selectPNG.addEventListener(
-    "click",
-    function(){
-
-        pngInput.click();
-
-    }
-);
-
-
-/* ==================================================
-   PNG 읽기
-================================================== */
-
-pngInput.addEventListener(
-    "change",
-    function(){
-
-        const file =
-            this.files[0];
-
-
-        if(!file){
-
-            return;
-
-        }
-
-
-        if(
-            file.type !== "image/png"
-        ){
-
-            setStatus(
-                "PNG 파일만 선택할 수 있습니다.",
-                "err"
-            );
-
-            return;
-
-        }
-
-
-        selectedPNG =
-            file;
-
-
-        fileBox
-            .classList
-            .remove(
-                "hidden"
-            );
-
-
-        fileName.textContent =
-            file.name;
-
-
-        fileInfo.textContent =
-            formatBytes(
-                file.size
-            )
-            + " · PNG";
-
-
-        if(
-            previewURL
-        ){
-
-            URL.revokeObjectURL(
-                previewURL
-            );
-
-        }
-
-
-        previewURL =
-            URL.createObjectURL(
-                file
-            );
-
-
-        preview.src =
-            previewURL;
-
-
-        preview.style.display =
-            "block";
-
-
-        previewCard
-            .classList
-            .remove(
-                "hidden"
-            );
-
-
-        preview.onload =
-            function(){
-
-                const width =
-                    preview.naturalWidth;
-
-                const height =
-                    preview.naturalHeight;
-
-
-                imageSize.textContent =
-                    width
-                    + " × "
-                    + height;
-
-
-                if(
-                    width === 256 &&
-                    height === 768
-                ){
-
-                    setStatus(
-                        "PNG 정상. 256 × 768 초상화 시트입니다.",
-                        "ok"
-                    );
-
-                }
-                else{
-
-                    setStatus(
-                        "PNG 크기는 "
-                        + width
-                        + " × "
-                        + height
-                        + "입니다. 권장 크기는 256 × 768입니다.",
-                        "warn"
-                    );
-
-                }
-
-
-                createConfig.disabled =
-                    false;
-
-
-                setStep(2);
-
-            };
-
-    }
-);
-
-
-/* ==================================================
-   설정 생성
-================================================== */
-
-createConfig.addEventListener(
-    "click",
-    function(){
-
-        if(
-            !selectedPNG
-        ){
-
-            setStatus(
-                "먼저 PNG를 선택하세요.",
-                "err"
-            );
-
-            return;
-
-        }
-
-
-        const name =
-            npc.value;
-
-
-        configData = {
-
-            [name]:
-                "portraits/"
-                + name
-                + ".png"
+            owl.src =
+                state.pet +
+                "_normal.png";
 
         };
 
-
-        resultCard
-            .classList
-            .remove(
-                "hidden"
-            );
+}
 
 
-        document
-            .getElementById(
-                "resultStatus"
-            )
-            .textContent =
-                name
-                + " 초상화 런타임 설정이 생성되었습니다.";
+function setStartEgg(){
 
+    if(!state.pet){
 
-        setStep(4);
+        startEgg.src =
+            "owl_egg.png";
 
-
-        setStatus(
-            "설정 생성 완료.",
-            "ok"
-        );
+        return;
 
     }
-);
 
 
-/* ==================================================
-   파일 다운로드
-================================================== */
+    startEgg.onerror =
+        null;
 
-function downloadFile(
-    blob,
-    filename
-){
 
-    const url =
-        URL.createObjectURL(
-            blob
+    startEgg.src =
+        petImage("egg");
+
+
+    startEgg.onerror =
+        function(){
+
+            startEgg.onerror =
+                null;
+
+            startEgg.src =
+                state.pet +
+                "_normal.png";
+
+        };
+
+}
+
+
+/* =========================================================
+   성장 단계
+========================================================= */
+
+function getStage(){
+
+    if(state.growth < 5){
+
+        return "egg";
+
+    }
+
+
+    if(state.growth < 10){
+
+        return "egg_cracked";
+
+    }
+
+
+    if(state.growth < 15){
+
+        return "hatching";
+
+    }
+
+
+    return "normal";
+
+}
+
+
+/* =========================================================
+   펫 상태 이미지 표시
+========================================================= */
+
+function updatePetImage(){
+
+    state.stage =
+        getStage();
+
+
+    if(owlSleeping){
+
+        setPetImage(
+            "sleep"
         );
 
+        return;
 
-    const link =
-        document.createElement(
-            "a"
-        );
+    }
 
 
-    link.href =
-        url;
+    setPetImage(
+        state.stage
+    );
+
+}
 
 
-    link.download =
-        filename;
+/* =========================================================
+   잠
+========================================================= */
+
+let owlLastTouchTime =
+    Date.now();
+
+let owlSleeping =
+    false;
 
 
-    link.style.display =
-        "none";
+function isNightTime(){
+
+    const hour =
+        new Date().getHours();
 
 
-    document.body.appendChild(
-        link
+    return (
+        hour >= 19 ||
+        hour < 6
+    );
+
+}
+
+
+function getSleepDelay(){
+
+    if(isNightTime()){
+
+        return 30 * 1000;
+
+    }
+
+
+    return 15 * 1000;
+
+}
+
+
+function wakeOwl(){
+
+    owlLastTouchTime =
+        Date.now();
+
+
+    if(!owlSleeping){
+
+        return;
+
+    }
+
+
+    owlSleeping =
+        false;
+
+
+    owlArea.classList.remove(
+        "sleeping"
     );
 
 
-    link.click();
+    setPetImage(
+        "normal"
+    );
 
 
-    link.remove();
+    showBubble(
+        randomItem([
+            "ᵕᴗᵕ",
+            "•ᴗ•",
+            "ᵔᴥᵔ"
+        ])
+    );
+
+
+    playSound(
+        "happy"
+    );
+
+}
+
+
+function sleepOwl(){
+
+    if(!state.started){
+
+        return;
+
+    }
+
+
+    if(
+        state.stage !==
+        "normal"
+    ){
+
+        return;
+
+    }
+
+
+    if(owlSleeping){
+
+        return;
+
+    }
+
+
+    owlSleeping =
+        true;
+
+
+    owlArea.classList.remove(
+        "long-press"
+    );
+
+
+    owlArea.classList.add(
+        "sleeping"
+    );
+
+
+    setPetImage(
+        "sleep"
+    );
+
+
+    showBubble(
+        randomItem(
+            EMOTES.sleepy
+        )
+    );
+
+}
+
+
+function checkOwlSleep(){
+
+    if(!state.started){
+
+        return;
+
+    }
+
+
+    if(
+        state.stage !==
+        "normal"
+    ){
+
+        return;
+
+    }
+
+
+    if(owlSleeping){
+
+        return;
+
+    }
+
+
+    const elapsed =
+        Date.now() -
+        owlLastTouchTime;
+
+
+    if(
+        elapsed >=
+        getSleepDelay()
+    ){
+
+        sleepOwl();
+
+    }
+
+}
+
+
+let previousNightState =
+    isNightTime();
+
+
+function updateSleepTimeState(){
+
+    const currentNightState =
+        isNightTime();
+
+
+    if(
+        currentNightState !==
+        previousNightState
+    ){
+
+        previousNightState =
+            currentNightState;
+
+
+        owlLastTouchTime =
+            Date.now();
+
+
+        if(owlSleeping){
+
+            owlSleeping =
+                false;
+
+
+            owlArea.classList.remove(
+                "sleeping"
+            );
+
+
+            setPetImage(
+                "normal"
+            );
+
+        }
+
+    }
+
+}
+
+
+setInterval(
+    function(){
+
+        updateSleepTimeState();
+
+        checkOwlSleep();
+
+    },
+    1000
+);
+
+
+/* =========================================================
+   오디오
+========================================================= */
+
+let audioContext =
+    null;
+
+
+function initAudio(){
+
+    try{
+
+        if(!audioContext){
+
+            const AudioCtx =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+
+            if(!AudioCtx){
+
+                return;
+
+            }
+
+
+            audioContext =
+                new AudioCtx();
+
+        }
+
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            audioContext.resume();
+
+        }
+
+    }catch(error){}
+
+}
+
+
+function tone(
+    frequency,
+    duration,
+    type="sine",
+    volume=0.045,
+    delay=0
+){
+
+    if(!audioContext){
+
+        return;
+
+    }
+
+
+    try{
+
+        const now =
+            audioContext.currentTime +
+            delay;
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.type =
+            type;
+
+
+        oscillator.frequency.setValueAtTime(
+            frequency,
+            now
+        );
+
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            now
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            volume,
+            now + 0.012
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + duration
+        );
+
+
+        oscillator.connect(
+            gain
+        );
+
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start(
+            now
+        );
+
+
+        oscillator.stop(
+            now +
+            duration +
+            0.03
+        );
+
+    }catch(error){}
+
+}
+
+
+function playSound(name){
+
+    initAudio();
+
+
+    if(!audioContext){
+
+        return;
+
+    }
+
+
+    if(name === "button"){
+
+        tone(
+            520,
+            .07,
+            "sine",
+            .035
+        );
+
+        return;
+
+    }
+
+
+    if(name === "feed"){
+
+        tone(
+            430,
+            .08,
+            "sine",
+            .04
+        );
+
+        tone(
+            620,
+            .13,
+            "sine",
+            .035,
+            .07
+        );
+
+        return;
+
+    }
+
+
+    if(name === "play"){
+
+        tone(
+            520,
+            .08,
+            "triangle",
+            .035
+        );
+
+        tone(
+            760,
+            .11,
+            "triangle",
+            .04,
+            .08
+        );
+
+        return;
+
+    }
+
+
+    if(name === "pet"){
+
+        tone(
+            360,
+            .18,
+            "sine",
+            .028
+        );
+
+        tone(
+            470,
+            .16,
+            "sine",
+            .024,
+            .10
+        );
+
+        return;
+
+    }
+
+
+    if(name === "talk"){
+
+        tone(
+            680,
+            .07,
+            "sine",
+            .035
+        );
+
+        tone(
+            560,
+            .10,
+            "sine",
+            .03,
+            .08
+        );
+
+        return;
+
+    }
+
+
+    if(name === "hold"){
+
+        tone(
+            420,
+            .12,
+            "sine",
+            .035
+        );
+
+        tone(
+            620,
+            .16,
+            "sine",
+            .04,
+            .09
+        );
+
+        return;
+
+    }
+
+
+    if(name === "prop"){
+
+        tone(
+            300,
+            .055,
+            "triangle",
+            .025
+        );
+
+        return;
+
+    }
+
+
+    if(name === "nest"){
+
+        tone(
+            280,
+            .08,
+            "sine",
+            .025
+        );
+
+        tone(
+            350,
+            .10,
+            "sine",
+            .025,
+            .07
+        );
+
+        return;
+
+    }
+
+
+    if(name === "hatch"){
+
+        tone(
+            350,
+            .08,
+            "triangle",
+            .035
+        );
+
+        tone(
+            520,
+            .09,
+            "triangle",
+            .04,
+            .09
+        );
+
+        tone(
+            760,
+            .18,
+            "triangle",
+            .045,
+            .19
+        );
+
+        return;
+
+    }
+
+
+    if(name === "happy"){
+
+        tone(
+            520,
+            .07,
+            "sine",
+            .035
+        );
+
+        tone(
+            690,
+            .10,
+            "sine",
+            .035,
+            .07
+        );
+
+        return;
+
+    }
+
+
+    if(name === "surprise"){
+
+        tone(
+            850,
+            .13,
+            "triangle",
+            .045
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   감정
+========================================================= */
+
+const EMOTES = {
+
+    normal:[
+        "•ᴗ•",
+        "ᵔᴥᵔ",
+        "*⸌☻ັ⸍*"
+    ],
+
+    happy:[
+        "•ᴗ•♥",
+        "ᵔᵕᵔ",
+        "*⸌◡⸍*"
+    ],
+
+    love:[
+        "-`♥´-",
+        "♥ᴗ♥",
+        "•ᴗ•♡"
+    ],
+
+    curious:[
+        "•ᴗ•?",
+        "ᵔᴥᵔ?",
+        "•̀ᴗ•́?"
+    ],
+
+    sleepy:[
+        "ᵕᴗᵕ",
+        "－ᴗ－",
+        "ᵕ﹏ᵕ"
+    ],
+
+    surprised:[
+        "⊙ᴗ⊙",
+        "•0•",
+        "ㅇㅁㅇ"
+    ],
+
+    shy:[
+        "⁄⁄•⁄ω⁄•⁄⁄",
+        "〃ᴗ〃",
+        "•///•"
+    ],
+
+    back:[
+        "ᵔᴥᵔ",
+        "••",
+        "ᵕᴥᵕ"
+    ]
+
+};
+
+
+function randomItem(array){
+
+    return array[
+        Math.floor(
+            Math.random() *
+            array.length
+        )
+    ];
+
+}
+
+
+let bubbleTimer =
+    null;
+
+
+function showBubble(text){
+
+    clearTimeout(
+        bubbleTimer
+    );
+
+
+    bubble.textContent =
+        text;
+
+
+    bubble.classList.add(
+        "show"
+    );
+
+
+    bubbleTimer =
+        setTimeout(
+            function(){
+
+                bubble.classList.remove(
+                    "show"
+                );
+
+            },
+            1300
+        );
+
+}
+
+
+function showRandomEmote(type){
+
+    showBubble(
+        randomItem(
+            EMOTES[type] ||
+            EMOTES.normal
+        )
+    );
+
+}
+
+
+/* =========================================================
+   애니메이션
+========================================================= */
+
+function replayClass(
+    element,
+    className
+){
+
+    element.classList.remove(
+        className
+    );
+
+
+    void element.offsetWidth;
+
+
+    element.classList.add(
+        className
+    );
 
 
     setTimeout(
         function(){
 
-            URL.revokeObjectURL(
-                url
+            element.classList.remove(
+                className
             );
 
         },
-        1500
+        900
     );
 
 }
 
 
-/* ==================================================
-   JSON 저장
-================================================== */
+/* =========================================================
+   효과
+========================================================= */
 
-saveConfig.addEventListener(
-    "click",
-    function(){
+function createEffect(
+    image,
+    x,
+    y
+){
 
-        if(
-            !configData
-        ){
+    const img =
+        document.createElement(
+            "img"
+        );
+
+
+    img.className =
+        "effect";
+
+
+    img.src =
+        image;
+
+
+    img.draggable =
+        false;
+
+
+    img.style.left =
+        x + "%";
+
+
+    img.style.top =
+        y + "%";
+
+
+    img.onerror =
+        function(){
+
+            img.remove();
+
+        };
+
+
+    effects.appendChild(
+        img
+    );
+
+
+    setTimeout(
+        function(){
+
+            img.remove();
+
+        },
+        900
+    );
+
+}
+
+
+/* =========================================================
+   전체 게임 업데이트
+========================================================= */
+
+function updateGame(){
+
+    state.stage =
+        getStage();
+
+
+    updatePetImage();
+
+
+    setStartEgg();
+
+}
+
+
+/* =========================================================
+   시작
+========================================================= */
+
+startButton.addEventListener(
+    "pointerdown",
+    function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        initAudio();
+
+
+        playSound(
+            "button"
+        );
+
+
+        /*
+            처음 시작할 때만
+            랜덤으로 펫 선택
+        */
+
+        if(!state.pet){
+
+            state.pet =
+                randomPet();
+
+        }
+
+
+        state.started =
+            true;
+
+
+        state.growth =
+            0;
+
+
+        state.stage =
+            "egg";
+
+
+        state.hunger =
+            70;
+
+
+        state.mood =
+            70;
+
+
+        owlSleeping =
+            false;
+
+
+        owlLastTouchTime =
+            Date.now();
+
+
+        saveState();
+
+
+        startScreen.classList.add(
+            "hidden"
+        );
+
+
+        updateGame();
+
+
+        showBubble(
+            "어떤 펫일까요?"
+        );
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   다시시작 버튼
+========================================================= */
+
+restartButton.addEventListener(
+    "pointerdown",
+    function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        if(!state.started){
 
             return;
 
         }
 
 
-        const json =
-            JSON.stringify(
-                configData,
-                null,
-                2
+        initAudio();
+
+
+        playSound(
+            "button"
+        );
+
+
+        confirmOverlay.classList.add(
+            "show"
+        );
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   취소
+========================================================= */
+
+cancelRestart.addEventListener(
+    "pointerdown",
+    function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        confirmOverlay.classList.remove(
+            "show"
+        );
+
+
+        playSound(
+            "button"
+        );
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   진짜 다시시작
+========================================================= */
+
+confirmRestart.addEventListener(
+    "pointerdown",
+    function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        confirmOverlay.classList.remove(
+            "show"
+        );
+
+
+        playSound(
+            "button"
+        );
+
+
+        localStorage.removeItem(
+            STORAGE_KEY
+        );
+
+
+        /*
+            완전히 새로운 펫
+        */
+
+        state = {
+
+            ...defaultState,
+
+            started:true,
+
+            pet:
+                randomPet(),
+
+            growth:0,
+
+            stage:"egg",
+
+            hunger:70,
+
+            mood:70,
+
+            lastUpdate:Date.now()
+
+        };
+
+
+        owlSleeping =
+            false;
+
+
+        owlLastTouchTime =
+            Date.now();
+
+
+        owlArea.classList.remove(
+            "sleeping",
+            "long-press"
+        );
+
+
+        clearTimeout(
+            pressTimer
+        );
+
+
+        pointerDown =
+            false;
+
+
+        isLongPress =
+            false;
+
+
+        saveState();
+
+
+        updateGame();
+
+
+        showBubble(
+            "새로운 펫이 태어났어요!"
+        );
+
+
+        playSound(
+            "happy"
+        );
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   초기 화면
+========================================================= */
+
+if(state.started){
+
+    startScreen.classList.add(
+        "hidden"
+    );
+
+}else{
+
+    startScreen.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+updateGame();
+
+
+/* =========================================================
+   먹이
+========================================================= */
+
+document
+    .getElementById("feedButton")
+    .addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            initAudio();
+
+            playSound(
+                "feed"
             );
 
 
-        const blob =
-            new Blob(
-                [json],
+            if(!state.started){
+
+                return;
+
+            }
+
+
+            /*
+                아직 알 상태라도
+                버튼을 누르면 성장
+            */
+
+            if(
+                state.stage !==
+                "normal"
+            ){
+
+                hatchTap();
+
+                return;
+
+            }
+
+
+            state.hunger =
+                Math.min(
+                    100,
+                    state.hunger + 18
+                );
+
+
+            state.mood =
+                Math.min(
+                    100,
+                    state.mood + 5
+                );
+
+
+            saveState();
+
+
+            showBubble(
+                randomItem([
+                    "ᵔᴥᵔ",
+                    "•ᴗ•♥",
+                    "*⸌◡⸍*"
+                ])
+            );
+
+
+            replayClass(
+                owl,
+                "owl-jump"
+            );
+
+
+            createEffect(
+                "effect_food.png",
+                42,
+                40
+            );
+
+        },
+        {
+            passive:false
+        }
+    );
+
+
+/* =========================================================
+   놀기
+========================================================= */
+
+document
+    .getElementById("playButton")
+    .addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            initAudio();
+
+            playSound(
+                "play"
+            );
+
+
+            if(!state.started){
+
+                return;
+
+            }
+
+
+            if(
+                state.stage !==
+                "normal"
+            ){
+
+                hatchTap();
+
+                return;
+
+            }
+
+
+            state.mood =
+                Math.min(
+                    100,
+                    state.mood + 20
+                );
+
+
+            state.hunger =
+                Math.max(
+                    0,
+                    state.hunger - 5
+                );
+
+
+            saveState();
+
+
+            showRandomEmote(
+                "happy"
+            );
+
+
+            replayClass(
+                owl,
+                "owl-wiggle"
+            );
+
+
+            createEffect(
+                "effect_star.png",
+                48,
+                37
+            );
+
+        },
+        {
+            passive:false
+        }
+    );
+
+
+/* =========================================================
+   쓰다듬기
+========================================================= */
+
+document
+    .getElementById("petButton")
+    .addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            initAudio();
+
+            playSound(
+                "pet"
+            );
+
+
+            if(!state.started){
+
+                return;
+
+            }
+
+
+            if(
+                state.stage !==
+                "normal"
+            ){
+
+                hatchTap();
+
+                return;
+
+            }
+
+
+            state.mood =
+                Math.min(
+                    100,
+                    state.mood + 12
+                );
+
+
+            saveState();
+
+
+            showRandomEmote(
+                "love"
+            );
+
+
+            replayClass(
+                owl,
+                "owl-jump"
+            );
+
+
+            createEffect(
+                "effect_heart.png",
+                53,
+                35
+            );
+
+        },
+        {
+            passive:false
+        }
+    );
+
+
+/* =========================================================
+   말걸기
+========================================================= */
+
+document
+    .getElementById("talkButton")
+    .addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            initAudio();
+
+            playSound(
+                "talk"
+            );
+
+
+            if(!state.started){
+
+                return;
+
+            }
+
+
+            if(
+                state.stage !==
+                "normal"
+            ){
+
+                hatchTap();
+
+                return;
+
+            }
+
+
+            const reactions = [
+
+                "normal",
+                "happy",
+                "curious",
+                "sleepy",
+                "shy",
+                "surprised"
+
+            ];
+
+
+            const type =
+                randomItem(
+                    reactions
+                );
+
+
+            showRandomEmote(
+                type
+            );
+
+
+            if(type === "happy"){
+
+                playSound(
+                    "happy"
+                );
+
+
+                replayClass(
+                    owl,
+                    "owl-jump"
+                );
+
+            }
+
+
+            if(type === "surprised"){
+
+                playSound(
+                    "surprise"
+                );
+
+
+                replayClass(
+                    owl,
+                    "owl-wiggle"
+                );
+
+            }
+
+        },
+        {
+            passive:false
+        }
+    );
+
+
+/* =========================================================
+   성장
+========================================================= */
+
+function hatchTap(){
+
+    if(
+        state.stage ===
+        "normal"
+    ){
+
+        showRandomEmote(
+            "happy"
+        );
+
+
+        playSound(
+            "happy"
+        );
+
+
+        return;
+
+    }
+
+
+    state.growth += 1;
+
+
+    if(
+        state.growth > 15
+    ){
+
+        state.growth =
+            15;
+
+    }
+
+
+    const oldStage =
+        state.stage;
+
+
+    state.stage =
+        getStage();
+
+
+    saveState();
+
+
+    updateGame();
+
+
+    /*
+        알
+        0~4
+    */
+
+    if(
+        state.stage ===
+        "egg"
+    ){
+
+        showBubble(
+            randomItem([
+                "•ᴗ•?",
+                "ᵔᴥᵔ",
+                "⊙ᴗ⊙"
+            ])
+        );
+
+
+        playSound(
+            "button"
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        알 깨짐
+        5~9
+    */
+
+    if(
+        state.stage ===
+        "egg_cracked"
+    ){
+
+        showBubble(
+            randomItem([
+                "⊙ᴗ⊙",
+                "•0•",
+                "ㅇㅁㅇ"
+            ])
+        );
+
+
+        replayClass(
+            owl,
+            "owl-wiggle"
+        );
+
+
+        playSound(
+            "hatch"
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        부화
+        10~14
+    */
+
+    if(
+        state.stage ===
+        "hatching"
+    ){
+
+        showBubble(
+            "*⸌☻ັ⸍*"
+        );
+
+
+        replayClass(
+            owl,
+            "owl-jump"
+        );
+
+
+        playSound(
+            "hatch"
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        성체
+        15
+    */
+
+    if(
+        state.stage ===
+        "normal"
+    ){
+
+        owlLastTouchTime =
+            Date.now();
+
+
+        owlSleeping =
+            false;
+
+
+        owlArea.classList.remove(
+            "sleeping"
+        );
+
+
+        setPetImage(
+            "normal"
+        );
+
+
+        showBubble(
+            "태어났어요!"
+        );
+
+
+        replayClass(
+            owl,
+            "owl-jump"
+        );
+
+
+        createEffect(
+            "effect_heart.png",
+            51,
+            35
+        );
+
+
+        playSound(
+            "happy"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   펫 짧게 누르기
+========================================================= */
+
+function owlShortTap(){
+
+    if(!state.started){
+
+        return;
+
+    }
+
+
+    if(owlSleeping){
+
+        wakeOwl();
+
+        return;
+
+    }
+
+
+    owlLastTouchTime =
+        Date.now();
+
+
+    if(
+        state.stage !==
+        "normal"
+    ){
+
+        hatchTap();
+
+        return;
+
+    }
+
+
+    const random =
+        Math.random();
+
+
+    /*
+        고개 갸웃
+    */
+
+    if(random < .20){
+
+        setPetImage(
+            "head_tilt"
+        );
+
+
+        showRandomEmote(
+            "curious"
+        );
+
+
+        playSound(
+            "talk"
+        );
+
+
+        setTimeout(
+            function(){
+
+                if(!owlSleeping){
+
+                    setPetImage(
+                        "normal"
+                    );
+
+                }
+
+            },
+            1200
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        엎드려 보기
+    */
+
+    if(random < .34){
+
+        setPetImage(
+            "peek"
+        );
+
+
+        showRandomEmote(
+            "curious"
+        );
+
+
+        playSound(
+            "talk"
+        );
+
+
+        setTimeout(
+            function(){
+
+                if(!owlSleeping){
+
+                    setPetImage(
+                        "normal"
+                    );
+
+                }
+
+            },
+            5000
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        부끄러움
+    */
+
+    if(random < .44){
+
+        setPetImage(
+            "shy"
+        );
+
+
+        showRandomEmote(
+            "shy"
+        );
+
+
+        playSound(
+            "pet"
+        );
+
+
+        setTimeout(
+            function(){
+
+                if(!owlSleeping){
+
+                    setPetImage(
+                        "normal"
+                    );
+
+                }
+
+            },
+            1100
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        놀람
+    */
+
+    if(random < .54){
+
+        setPetImage(
+            "surprised"
+        );
+
+
+        showRandomEmote(
+            "surprised"
+        );
+
+
+        playSound(
+            "surprise"
+        );
+
+
+        setTimeout(
+            function(){
+
+                if(!owlSleeping){
+
+                    setPetImage(
+                        "normal"
+                    );
+
+                }
+
+            },
+            900
+        );
+
+
+        return;
+
+    }
+
+
+    showRandomEmote(
+        "normal"
+    );
+
+
+    playSound(
+        "button"
+    );
+
+
+    replayClass(
+        owl,
+        "owl-jump"
+    );
+
+}
+
+
+/* =========================================================
+   꾹 누르기
+========================================================= */
+
+let pressTimer =
+    null;
+
+let pressStartX =
+    0;
+
+let pressStartY =
+    0;
+
+let isLongPress =
+    false;
+
+let pointerDown =
+    false;
+
+
+owlArea.addEventListener(
+    "pointerdown",
+    function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        initAudio();
+
+
+        if(!state.started){
+
+            return;
+
+        }
+
+
+        owlLastTouchTime =
+            Date.now();
+
+
+        if(owlSleeping){
+
+            wakeOwl();
+
+        }
+
+
+        pointerDown =
+            true;
+
+
+        isLongPress =
+            false;
+
+
+        pressStartX =
+            event.clientX;
+
+
+        pressStartY =
+            event.clientY;
+
+
+        clearTimeout(
+            pressTimer
+        );
+
+
+        try{
+
+            owlArea.setPointerCapture(
+                event.pointerId
+            );
+
+        }catch(error){}
+
+
+        pressTimer =
+            setTimeout(
+                function(){
+
+                    if(!pointerDown){
+
+                        return;
+
+                    }
+
+
+                    isLongPress =
+                        true;
+
+
+                    owlArea.classList.add(
+                        "long-press"
+                    );
+
+
+                    showRandomEmote(
+                        "happy"
+                    );
+
+
+                    createEffect(
+                        "effect_heart.png",
+                        51,
+                        31
+                    );
+
+
+                    playSound(
+                        "hold"
+                    );
+
+                },
+                300
+            );
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   이동
+========================================================= */
+
+owlArea.addEventListener(
+    "pointermove",
+    function(event){
+
+        if(!pointerDown){
+
+            return;
+
+        }
+
+
+        event.preventDefault();
+
+
+        const dx =
+            event.clientX -
+            pressStartX;
+
+
+        const dy =
+            event.clientY -
+            pressStartY;
+
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+
+        if(
+            distance > 12 &&
+            !isLongPress
+        ){
+
+            clearTimeout(
+                pressTimer
+            );
+
+        }
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   터치 종료
+========================================================= */
+
+function finishOwlPress(event){
+
+    event.preventDefault();
+    event.stopPropagation();
+
+
+    clearTimeout(
+        pressTimer
+    );
+
+
+    if(!pointerDown){
+
+        return;
+
+    }
+
+
+    pointerDown =
+        false;
+
+
+    owlArea.classList.remove(
+        "long-press"
+    );
+
+
+    if(isLongPress){
+
+        isLongPress =
+            false;
+
+
+        owlLastTouchTime =
+            Date.now();
+
+
+        if(!owlSleeping){
+
+            setPetImage(
+                "normal"
+            );
+
+
+            showRandomEmote(
+                "love"
+            );
+
+
+            playSound(
+                "pet"
+            );
+
+        }
+
+
+        return;
+
+    }
+
+
+    isLongPress =
+        false;
+
+
+    owlShortTap();
+
+}
+
+
+owlArea.addEventListener(
+    "pointerup",
+    finishOwlPress,
+    {
+        passive:false
+    }
+);
+
+
+owlArea.addEventListener(
+    "pointercancel",
+    finishOwlPress,
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   둥지
+========================================================= */
+
+nest.addEventListener(
+    "pointerdown",
+    function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        initAudio();
+
+
+        if(!state.started){
+
+            return;
+
+        }
+
+
+        replayClass(
+            nest,
+            "nest-shake"
+        );
+
+
+        showBubble(
+            randomItem([
+                "ᵔᴥᵔ",
+                "•ᴗ•",
+                "ᵕᴗᵕ"
+            ])
+        );
+
+
+        playSound(
+            "nest"
+        );
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   소품
+========================================================= */
+
+function setupProp(
+    element,
+    emoteType,
+    sound="prop"
+){
+
+    element.addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            initAudio();
+
+
+            if(!state.started){
+
+                return;
+
+            }
+
+
+            replayClass(
+                element,
+                "shake"
+            );
+
+
+            showRandomEmote(
+                emoteType
+            );
+
+
+            playSound(
+                sound
+            );
+
+        },
+        {
+            passive:false
+        }
+    );
+
+}
+
+
+setupProp(
+    shelf,
+    "curious"
+);
+
+
+setupProp(
+    booksStanding,
+    "normal"
+);
+
+
+setupProp(
+    booksHorizontal,
+    "curious"
+);
+
+
+setupProp(
+    plant,
+    "normal"
+);
+
+
+setupProp(
+    lamp,
+    "normal"
+);
+
+
+setupProp(
+    note,
+    "curious"
+);
+
+
+/* =========================================================
+   기본 동작 차단
+========================================================= */
+
+function preventNative(event){
+
+    event.preventDefault();
+
+    return false;
+
+}
+
+
+document.addEventListener(
+    "contextmenu",
+    preventNative,
+    {
+        passive:false
+    }
+);
+
+
+document.addEventListener(
+    "selectstart",
+    preventNative,
+    {
+        passive:false
+    }
+);
+
+
+document.addEventListener(
+    "dragstart",
+    preventNative,
+    {
+        passive:false
+    }
+);
+
+
+document.addEventListener(
+    "gesturestart",
+    preventNative,
+    {
+        passive:false
+    }
+);
+
+
+document.addEventListener(
+    "gesturechange",
+    preventNative,
+    {
+        passive:false
+    }
+);
+
+
+document.addEventListener(
+    "gestureend",
+    preventNative,
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   멀티터치 방지
+========================================================= */
+
+document.addEventListener(
+    "touchstart",
+    function(event){
+
+        if(
+            event.touches &&
+            event.touches.length > 1
+        ){
+
+            event.preventDefault();
+
+        }
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+document.addEventListener(
+    "touchmove",
+    function(event){
+
+        if(
+            event.touches &&
+            event.touches.length > 1
+        ){
+
+            event.preventDefault();
+
+        }
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+let lastTouchTime =
+    0;
+
+
+document.addEventListener(
+    "touchend",
+    function(event){
+
+        const now =
+            Date.now();
+
+
+        if(
+            now -
+            lastTouchTime <
+            350
+        ){
+
+            event.preventDefault();
+
+        }
+
+
+        lastTouchTime =
+            now;
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================================================
+   이미지 동작 차단
+========================================================= */
+
+document
+    .querySelectorAll("img")
+    .forEach(
+        function(img){
+
+            img.setAttribute(
+                "draggable",
+                "false"
+            );
+
+
+            img.addEventListener(
+                "dragstart",
+                preventNative,
                 {
-                    type:
-                        "application/json"
+                    passive:false
                 }
             );
 
 
-        downloadFile(
-            blob,
-            "portraits.json"
+            img.addEventListener(
+                "contextmenu",
+                preventNative,
+                {
+                    passive:false
+                }
+            );
+
+        }
+    );
+
+
+[
+    game,
+    owlArea,
+    nest,
+    shelf,
+    booksStanding,
+    booksHorizontal,
+    plant,
+    lamp,
+    note,
+    restartButton,
+    confirmOverlay,
+    confirmCard,
+    cancelRestart,
+    confirmRestart
+].forEach(
+    function(element){
+
+        element.addEventListener(
+            "contextmenu",
+            preventNative,
+            {
+                passive:false
+            }
+        );
+
+
+        element.addEventListener(
+            "selectstart",
+            preventNative,
+            {
+                passive:false
+            }
+        );
+
+
+        element.addEventListener(
+            "dragstart",
+            preventNative,
+            {
+                passive:false
+            }
         );
 
     }
 );
 
 
-/* ==================================================
-   PNG 저장
-================================================== */
+/* =========================================================
+   낮 / 밤
+========================================================= */
 
-savePNG.addEventListener(
-    "click",
-    function(){
+function updateDayNight(){
+
+    const hour =
+        new Date().getHours();
+
+
+    const night =
+        hour >= 19 ||
+        hour < 6;
+
+
+    if(night){
 
         if(
-            !selectedPNG
+            !background.src.endsWith(
+                "bg_night.png"
+            )
         ){
 
-            return;
+            background.style.opacity =
+                "0";
+
+
+            setTimeout(
+                function(){
+
+                    background.src =
+                        "bg_night.png";
+
+
+                    background.style.opacity =
+                        "1";
+
+                },
+                180
+            );
 
         }
 
 
-        downloadFile(
-            selectedPNG,
-            npc.value
-            + ".png"
+        game.classList.add(
+            "night"
+        );
+
+    }else{
+
+        if(
+            !background.src.endsWith(
+                "bg_day.png"
+            )
+        ){
+
+            background.style.opacity =
+                "0";
+
+
+            setTimeout(
+                function(){
+
+                    background.src =
+                        "bg_day.png";
+
+
+                    background.style.opacity =
+                        "1";
+
+                },
+                180
+            );
+
+        }
+
+
+        game.classList.remove(
+            "night"
         );
 
     }
+
+}
+
+
+updateDayNight();
+
+
+setInterval(
+    updateDayNight,
+    60000
 );
 
 
-/* ==================================================
-   초기화
-================================================== */
+/* =========================================================
+   능력치
+========================================================= */
 
-reset.addEventListener(
-    "click",
+function updateStats(){
+
+    if(!state.started){
+
+        return;
+
+    }
+
+
+    const now =
+        Date.now();
+
+
+    const elapsed =
+        now -
+        state.lastUpdate;
+
+
+    if(elapsed < 60000){
+
+        return;
+
+    }
+
+
+    const minutes =
+        Math.floor(
+            elapsed /
+            60000
+        );
+
+
+    if(
+        state.stage ===
+        "normal"
+    ){
+
+        state.hunger =
+            Math.max(
+                0,
+                state.hunger -
+                minutes
+            );
+
+
+        state.mood =
+            Math.max(
+                0,
+                state.mood -
+                Math.floor(
+                    minutes / 2
+                )
+            );
+
+    }
+
+
+    saveState();
+
+}
+
+
+setInterval(
+    updateStats,
+    60000
+);
+
+
+/* =========================================================
+   랜덤 행동
+========================================================= */
+
+function idleBehavior(){
+
+    if(!state.started){
+
+        return;
+
+    }
+
+
+    if(
+        state.stage !==
+        "normal"
+    ){
+
+        return;
+
+    }
+
+
+    if(owlSleeping){
+
+        return;
+
+    }
+
+
+    const random =
+        Math.random();
+
+
+    /*
+        고개 갸웃
+    */
+
+    if(random < .32){
+
+        setPetImage(
+            "head_tilt"
+        );
+
+
+        showRandomEmote(
+            "curious"
+        );
+
+
+        setTimeout(
+            function(){
+
+                if(!owlSleeping){
+
+                    setPetImage(
+                        "normal"
+                    );
+
+                }
+
+            },
+            1300
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        엎드려 보기
+    */
+
+    if(random < .58){
+
+        setPetImage(
+            "peek"
+        );
+
+
+        showRandomEmote(
+            "curious"
+        );
+
+
+        setTimeout(
+            function(){
+
+                if(!owlSleeping){
+
+                    setPetImage(
+                        "normal"
+                    );
+
+                }
+
+            },
+            5000
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        뒤돌아보기
+    */
+
+    if(random < .78){
+
+        setPetImage(
+            "back"
+        );
+
+
+        showRandomEmote(
+            "back"
+        );
+
+
+        setTimeout(
+            function(){
+
+                if(!owlSleeping){
+
+                    setPetImage(
+                        "normal"
+                    );
+
+                }
+
+            },
+            1400
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        평범한 행동
+    */
+
+    showRandomEmote(
+        "normal"
+    );
+
+
+    replayClass(
+        owl,
+        "owl-jump"
+    );
+
+
+    playSound(
+        "button"
+    );
+
+}
+
+
+setInterval(
+    idleBehavior,
+    6000
+);
+
+
+/* =========================================================
+   화면 복귀
+========================================================= */
+
+document.addEventListener(
+    "visibilitychange",
     function(){
 
-        selectedPNG =
-            null;
+        if(!document.hidden){
 
+            updateStats();
 
-        configData =
-            null;
+            updateDayNight();
 
+            updateSleepTimeState();
 
-        pngInput.value =
-            "";
+            checkOwlSleep();
 
+            updateGame();
 
-        fileBox
-            .classList
-            .add(
-                "hidden"
-            );
-
-
-        previewCard
-            .classList
-            .add(
-                "hidden"
-            );
-
-
-        resultCard
-            .classList
-            .add(
-                "hidden"
-            );
-
-
-        preview.src =
-            "";
-
-
-        imageSize.textContent =
-            "-";
-
-
-        createConfig.disabled =
-            true;
-
-
-        setStatus(
-            "NPC와 PNG를 선택하세요."
-        );
-
-
-        setStep(1);
-
-
-        updateNPC();
+        }
 
     }
 );
 
 
-/* ==================================================
-   시작
-================================================== */
+/* =========================================================
+   종료
+========================================================= */
 
-updateNPC();
+window.addEventListener(
+    "beforeunload",
+    function(){
 
-setStep(1);
+        saveState();
+
+    }
+);
 
 </script>
 
